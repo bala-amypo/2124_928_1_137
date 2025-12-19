@@ -1,18 +1,31 @@
 package com.example.demo.entity;
+
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+
+@Entity
+@Table(name = "user_roles") // optional, DB table name
 public class UserRole {
-private Long id;
-private Long userId;
-private Long roleId;
-public UserRole() {}
-public UserRole(Long id, Long userId, Long roleId) {
-this.id = id;
-this.userId = userId;
-this.roleId = roleId;
-}
-public Long getId() { return id; }
-public void setId(Long id) { this.id = id; }
-public Long getUserId() { return userId; }
-public void setUserId(Long userId) { this.userId = userId; }
-public Long getRoleId() { return roleId; }
-public void setRoleId(Long roleId) { this.roleId = roleId; }
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    private String roleName;
+
+    // Constructors
+    public UserRole() {}
+    public UserRole(String roleName) {
+        this.roleName = roleName;
+    }
+
+    // Getters and Setters
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
+
+    public String getRoleName() { return roleName; }
+    public void setRoleName(String roleName) { this.roleName = roleName; }
 }
