@@ -1,8 +1,9 @@
+
 package com.example.demo.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import com.example.demo.entity.Role;
+import com.example.demo.entity.RolePermission;
 
-public interface RoleRepository
-        extends JpaRepository<Role, Long> {
+public interface RolePermissionRepository
+        extends JpaRepository<RolePermission, Long> {
 }
