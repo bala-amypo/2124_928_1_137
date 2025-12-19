@@ -5,12 +5,13 @@ import com.example.demo.entity.UserRole;
 import com.example.demo.repository.UserRoleRepository;
 @Service
 public class UserRoleServiceImpl implements UserRoleService {
-@Autowired
-UserRoleRepository repo;
-public UserRole assignRole(UserRole userRole) {
-return repo.save(userRole);
-}
-public UserRole getMapping(Long id) {
-return repo.findById(id);
-}
+    @Autowired
+    private UserRoleRepository repo;
+
+    public UserRole assignRole(UserRole userRole) {
+        return repo.save(userRole);
+    }
+    public UserRole getMapping(Long id) {
+        return repo.findById(id).orElse(null);
+    }
 }
