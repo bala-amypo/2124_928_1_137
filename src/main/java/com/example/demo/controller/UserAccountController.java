@@ -6,17 +6,14 @@ import com.example.demo.service.UserAccountService;
 @RestController
 @RequestMapping("/api/users")
 public class UserAccountController {
-
-    @Autowired
-    private UserAccountService service;
-
-    @PostMapping("/add")
-    public UserAccount add(@RequestBody UserAccount user) {
-        return service.createUser(user);
-    }
-
-    @GetMapping("/get/{id}")
-    public UserAccount get(@PathVariable Long id) {
-        return service.getUser(id);
-    }
+@Autowired
+UserAccountService service;
+@PostMapping("/add")
+public UserAccount add(@RequestBody UserAccount user) {
+return service.createUser(user);
+}
+@GetMapping("/get/{id}")
+public UserAccount get(@PathVariable Long id) {
+return service.getUser(id);
+}
 }

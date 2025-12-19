@@ -6,17 +6,14 @@ import com.example.demo.service.RoleService;
 @RestController
 @RequestMapping("/api/roles")
 public class RoleController {
-
-    @Autowired
-    private RoleService service;
-
-    @PostMapping("/add")
-    public Role add(@RequestBody Role role) {
-        return service.createRole(role);
-    }
-
-    @GetMapping("/get/{id}")
-    public Role get(@PathVariable Long id) {
-        return service.getRole(id);
-    }
+@Autowired
+RoleService service;
+@PostMapping("/add")
+public Role add(@RequestBody Role role) {
+return service.createRole(role);
+}
+@GetMapping("/get/{id}")
+public Role get(@PathVariable Long id) {
+return service.getRole(id);
+}
 }
