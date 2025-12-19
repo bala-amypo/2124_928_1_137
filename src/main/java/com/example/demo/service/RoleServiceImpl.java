@@ -4,15 +4,13 @@ import org.springframework.stereotype.Service;
 import com.example.demo.entity.Role;
 import com.example.demo.repository.RoleRepository;
 @Service
-public class RolePermissionServiceImpl implements RolePermissionService {
-    @Autowired
-    private RolePermissionRepository repo;
-
-    public RolePermission grantPermission(RolePermission rp) {
-        return repo.save(rp);
-    }
-    public RolePermission getMapping(Long id) {
-        return repo.findById(id).orElse(null);
-    }
+public class RoleServiceImpl implements RoleService {
+@Autowired
+RoleRepository repo;
+public Role createRole(Role role) {
+return repo.save(role);
 }
-
+public Role getRole(Long id) {
+return repo.findById(id);
+}
+}
