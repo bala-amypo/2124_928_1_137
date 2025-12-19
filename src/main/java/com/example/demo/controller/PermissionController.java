@@ -8,7 +8,6 @@ import com.example.demo.service.PermissionService;
 public class PermissionController {
 @Autowired
 PermissionService service;
-
 @PostMapping("/add")
 public Permission add(@RequestBody Permission permission) {
 return service.addPermission(permission);
@@ -17,22 +16,4 @@ return service.addPermission(permission);
 public Permission get(@PathVariable Long id) {
 return service.getPermission(id);
 }
-}
-
-@RestController
-@RequestMapping("/api/permissions")
-public class PermissionController {
-
-    @Autowired
-    private PermissionService service;
-
-    @PostMapping("/add")
-    public Permission add(@RequestBody Permission permission) {
-        return service.addPermission(permission);
-    }
-
-    @GetMapping("/get/{id}")
-    public Permission get(@PathVariable Long id) {
-        return service.getPermission(id);
-    }
 }
