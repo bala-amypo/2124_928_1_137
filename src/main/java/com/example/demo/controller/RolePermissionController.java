@@ -6,14 +6,17 @@ import com.example.demo.service.RolePermissionService;
 @RestController
 @RequestMapping("/api/role-permissions")
 public class RolePermissionController {
-@Autowired
-RolePermissionService service;
-@PostMapping("/add")
-public RolePermission add(@RequestBody RolePermission rp) {
-return service.grantPermission(rp);
-}
-@GetMapping("/get/{id}")
-public RolePermission get(@PathVariable Long id) {
-return service.getMapping(id);
-}
+
+    @Autowired
+    private RolePermissionService service;
+
+    @PostMapping("/add")
+    public RolePermission add(@RequestBody RolePermission rp) {
+        return service.grantPermission(rp);
+    }
+
+    @GetMapping("/get/{id}")
+    public RolePermission get(@PathVariable Long id) {
+        return service.getMapping(id);
+    }
 }

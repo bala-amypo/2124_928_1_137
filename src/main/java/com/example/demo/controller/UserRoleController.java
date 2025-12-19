@@ -6,14 +6,17 @@ import com.example.demo.service.UserRoleService;
 @RestController
 @RequestMapping("/api/user-roles")
 public class UserRoleController {
-@Autowired
-UserRoleService service;
-@PostMapping("/add")
-public UserRole add(@RequestBody UserRole ur) {
-return service.assignRole(ur);
-}
-@GetMapping("/get/{id}")
-public UserRole get(@PathVariable Long id) {
-return service.getMapping(id);
-}
+
+    @Autowired
+    private UserRoleService service;
+
+    @PostMapping("/add")
+    public UserRole add(@RequestBody UserRole ur) {
+        return service.assignRole(ur);
+    }
+
+    @GetMapping("/get/{id}")
+    public UserRole get(@PathVariable Long id) {
+        return service.getMapping(id);
+    }
 }
