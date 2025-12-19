@@ -1,3 +1,4 @@
+
 package com.example.demo.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +20,6 @@ public class RolePermissionServiceImpl implements RolePermissionService {
 
     @Override
     public RolePermission getMapping(Long id) {
-        return repository.findById(id)
-                .orElseThrow(() -> new RuntimeException("RolePermission not found"));
+        return repository.findById(id).orElse(null);
     }
 }

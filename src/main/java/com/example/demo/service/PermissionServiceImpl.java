@@ -19,7 +19,6 @@ public class PermissionServiceImpl implements PermissionService {
 
     @Override
     public Permission getPermission(Long id) {
-        return repository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Permission not found"));
+        return repository.findById(id).orElse(null);
     }
 }

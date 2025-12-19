@@ -19,7 +19,6 @@ public class RoleServiceImpl implements RoleService {
 
     @Override
     public Role getRole(Long id) {
-        return repository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Role not found"));
+        return repository.findById(id).orElse(null);
     }
 }

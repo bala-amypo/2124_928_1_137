@@ -19,7 +19,6 @@ public class UserRoleServiceImpl implements UserRoleService {
 
     @Override
     public UserRole getMapping(Long id) {
-        return repository.findById(id)
-                .orElseThrow(() -> new RuntimeException("UserRole not found"));
+        return repository.findById(id).orElse(null);
     }
 }

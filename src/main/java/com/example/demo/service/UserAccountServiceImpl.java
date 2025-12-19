@@ -19,7 +19,6 @@ public class UserAccountServiceImpl implements UserAccountService {
 
     @Override
     public UserAccount getUser(Long id) {
-        return repository.findById(id)
-                .orElseThrow(() -> new RuntimeException("User not found"));
+        return repository.findById(id).orElse(null);
     }
 }
