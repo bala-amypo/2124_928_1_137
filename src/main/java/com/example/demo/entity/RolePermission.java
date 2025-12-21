@@ -1,10 +1,13 @@
 package com.example.demo.entity;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
+import jakarta.persistence.Id;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.PrePersist;
+import java.sql.Timestamp;
 
 @Entity
 @Table(name = "role_permissions")
@@ -14,23 +17,22 @@ public class RolePermission {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private Long roleId;
-    private Long permissionId;
+    @ManyToOne
+    private Role role;
 
-    // Constructors
-    public RolePermission() {}
-    public RolePermission(Long roleId, Long permissionId) {
-        this.roleId = roleId;
-        this.permissionId = permissionId;
+    @ManyToOne
+    private Permission permission;
+
+    private Timestamp grantedAt;
+
+    @PrePersist
+    void onGrant() {
+        grantedAt = new Timestamp(System.currentTimeMillis());
     }
 
-    // Getters and Setters
     public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
-
-    public Long getRoleId() { return roleId; }
-    public void setRoleId(Long roleId) { this.roleId = roleId; }
-
-    public Long getPermissionId() { return permissionId; }
-    public void setPermissionId(Long permissionId) { this.permissionId = permissionId; }
+    public Role getRole() { return role; }
+    public void setRole(Role role) { this.role = role; }
+    public Permission getPermission() { return permission; }
+    public void setPermission(Permission permission) { this.permission = permission; }
 }

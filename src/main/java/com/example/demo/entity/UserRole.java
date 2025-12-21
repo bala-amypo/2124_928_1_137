@@ -1,31 +1,38 @@
 package com.example.demo.entity;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
+import jakarta.persistence.Id;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.PrePersist;
+import java.sql.Timestamp;
 
 @Entity
-@Table(name = "user_roles") // optional, DB table name
+@Table(name = "user_roles")
 public class UserRole {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String roleName;
+    @ManyToOne
+    private UserAccount user;
 
-    // Constructors
-    public UserRole() {}
-    public UserRole(String roleName) {
-        this.roleName = roleName;
+    @ManyToOne
+    private Role role;
+
+    private Timestamp assignedAt;
+
+    @PrePersist
+    void onAssign() {
+        assignedAt = new Timestamp(System.currentTimeMillis());
     }
 
-    // Getters and Setters
     public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
-
-    public String getRoleName() { return roleName; }
-    public void setRoleName(String roleName) { this.roleName = roleName; }
+    public UserAccount getUser() { return user; }
+    public void setUser(UserAccount user) { this.user = user; }
+    public Role getRole() { return role; }
+    public void setRole(Role role) { this.role = role; }
 }
