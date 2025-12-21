@@ -52,4 +52,11 @@ public class PermissionServiceImpl implements PermissionService {
         permission.setActive(false);
         repository.save(permission);
     }
+
+    // 🔴 ADD THIS METHOD
+    @Override
+    public void deletePermission(Long id) {
+        Permission permission = getPermissionById(id);
+        repository.delete(permission);
+    }
 }
