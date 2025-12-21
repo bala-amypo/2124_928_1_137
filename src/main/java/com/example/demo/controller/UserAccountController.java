@@ -17,26 +17,31 @@ public class UserAccountController {
         this.service = service;
     }
 
+    // POST /api/users
     @PostMapping
     public UserAccount create(@RequestBody UserAccount user) {
         return service.createUser(user);
     }
 
+    // PUT /api/users/{id}
     @PutMapping("/{id}")
     public UserAccount update(@PathVariable Long id, @RequestBody UserAccount user) {
         return service.updateUser(id, user);
     }
 
+    // GET /api/users/{id}
     @GetMapping("/{id}")
     public UserAccount get(@PathVariable Long id) {
         return service.getUserById(id);
     }
 
+    // GET /api/users
     @GetMapping
-    public List<UserAccount> list() {
+    public List<UserAccount> getAll() {
         return service.getAllUsers();
     }
 
+    // PUT /api/users/{id}/deactivate
     @PutMapping("/{id}/deactivate")
     public void deactivate(@PathVariable Long id) {
         service.deactivateUser(id);
