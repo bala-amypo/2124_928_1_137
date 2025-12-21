@@ -21,17 +21,26 @@ public class UserAccountServiceImpl implements UserAccountService {
 
     @Override
     public UserAccount createUser(UserAccount user) {
+
+        if (user.getId() != null) {
+            throw new BadRequestException("ID must not be provided while creating user");
+        }
+
         if (repository.existsByEmail(user.getEmail())) {
             throw new BadRequestException("Email already exists");
         }
+
         return repository.save(user);
     }
 
     @Override
     public UserAccount updateUser(Long id, UserAccount user) {
-        UserAccount existing = getUserById(id);
+        UserAccount existing = repository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+
         existing.setEmail(user.getEmail());
         existing.setFullName(user.getFullName());
+
         return repository.save(existing);
     }
 
@@ -48,7 +57,8 @@ public class UserAccountServiceImpl implements UserAccountService {
 
     @Override
     public void deactivateUser(Long id) {
-        UserAccount user = getUserById(id);
+        UserAccount user = repository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
         user.setActive(false);
         repository.save(user);
     }
