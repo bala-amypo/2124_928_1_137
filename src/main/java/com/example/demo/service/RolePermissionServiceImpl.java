@@ -1,25 +1,41 @@
+package com.example.demo.service.impl;
 
-package com.example.demo.service;
+import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.demo.entity.RolePermission;
+import com.example.demo.exception.ResourceNotFoundException;
 import com.example.demo.repository.RolePermissionRepository;
+import com.example.demo.service.RolePermissionService;
 
 @Service
 public class RolePermissionServiceImpl implements RolePermissionService {
 
-    @Autowired
-    private RolePermissionRepository repository;
+    private final RolePermissionRepository repository;
 
-    @Override
-    public RolePermission grantPermission(RolePermission rp) {
-        return repository.save(rp);
+    public RolePermissionServiceImpl(RolePermissionRepository repository) {
+        this.repository = repository;
     }
 
     @Override
-    public RolePermission getMapping(Long id) {
-        return repository.findById(id).orElse(null);
+    public RolePermission grantPermission(RolePermission mapping) {
+        return repository.save(mapping);
+    }
+
+    @Override
+    public List<RolePermission> getPermissionsForRole(Long roleId) {
+        return repository.findByRole_Id(roleId);
+    }
+
+    @Override
+    public RolePermission getMappingById(Long id) {
+        return repository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Mapping not found"));
+    }
+
+    @Override
+    public void revokePermission(Long id) {
+        repository.delete(getMappingById(id));
     }
 }
