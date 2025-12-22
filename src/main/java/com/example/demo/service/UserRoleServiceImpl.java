@@ -10,7 +10,7 @@ import com.example.demo.entity.UserRole;
 import com.example.demo.exception.BadRequestException;
 import com.example.demo.exception.ResourceNotFoundException;
 import com.example.demo.repository.RoleRepository;
-import com.example.demo.repository.UserRepository;
+import com.example.demo.repository.UserAccountRepository;
 import com.example.demo.repository.UserRoleRepository;
 import com.example.demo.service.UserRoleService;
 
@@ -18,15 +18,15 @@ import com.example.demo.service.UserRoleService;
 public class UserRoleServiceImpl implements UserRoleService {
 
     private final UserRoleRepository userRoleRepository;
-    private final UserRepository userRepository;
+    private final UserAccountRepository userAccountRepository;
     private final RoleRepository roleRepository;
 
     public UserRoleServiceImpl(
             UserRoleRepository userRoleRepository,
-            UserRepository userRepository,
+            UserAccountRepository userAccountRepository,
             RoleRepository roleRepository) {
         this.userRoleRepository = userRoleRepository;
-        this.userRepository = userRepository;
+        this.userAccountRepository = userAccountRepository;
         this.roleRepository = roleRepository;
     }
 
@@ -41,12 +41,15 @@ public class UserRoleServiceImpl implements UserRoleService {
             throw new BadRequestException("Role ID is required");
         }
 
-        // 🔥 FETCH FULL ENTITIES FROM DB
-        UserAccount user = userRepository.findById(mapping.getUser().getId())
+        // ✅ FETCH FULL USER
+        UserAccount user = userAccountRepository
+                .findById(mapping.getUser().getId())
                 .orElseThrow(() ->
                         new ResourceNotFoundException("User not found"));
 
-        Role role = roleRepository.findById(mapping.getRole().getId())
+        // ✅ FETCH FULL ROLE
+        Role role = roleRepository
+                .findById(mapping.getRole().getId())
                 .orElseThrow(() ->
                         new ResourceNotFoundException("Role not found"));
 
@@ -58,7 +61,6 @@ public class UserRoleServiceImpl implements UserRoleService {
             throw new BadRequestException("User already has this role");
         }
 
-        // 🔥 IMPORTANT: set fetched entities
         mapping.setUser(user);
         mapping.setRole(role);
 
