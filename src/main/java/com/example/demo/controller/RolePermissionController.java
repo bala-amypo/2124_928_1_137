@@ -18,22 +18,22 @@ public class RolePermissionController {
     }
 
     @PostMapping
-    public RolePermission grant(@RequestBody RolePermission mapping) {
-        return service.grantPermission(mapping);
-    }
-
-    @GetMapping("/role/{roleId}")
-    public List<RolePermission> list(@PathVariable Long roleId) {
-        return service.getPermissionsForRole(roleId);
+    public RolePermission assign(@RequestBody RolePermission mapping) {
+        return service.assignPermission(mapping);
     }
 
     @GetMapping("/{id}")
     public RolePermission get(@PathVariable Long id) {
-        return service.getMappingById(id);
+        return service.getById(id);
+    }
+
+    @GetMapping("/role/{roleId}")
+    public List<RolePermission> list(@PathVariable Long roleId) {
+        return service.getByRoleId(roleId);
     }
 
     @DeleteMapping("/{id}")
-    public void revoke(@PathVariable Long id) {
-        service.revokePermission(id);
+    public void delete(@PathVariable Long id) {
+        service.remove(id);
     }
 }
