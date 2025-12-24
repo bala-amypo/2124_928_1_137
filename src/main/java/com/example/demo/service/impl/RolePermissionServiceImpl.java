@@ -1,11 +1,13 @@
 package com.example.demo.service.impl;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 import com.example.demo.entity.RolePermission;
 import com.example.demo.repository.PermissionRepository;
 import com.example.demo.repository.RolePermissionRepository;
 import com.example.demo.repository.RoleRepository;
 import com.example.demo.service.RolePermissionService;
-import org.springframework.stereotype.Service;
 
 import java.util.List;
 
@@ -16,7 +18,7 @@ public class RolePermissionServiceImpl implements RolePermissionService {
     private final RoleRepository roleRepository;
     private final PermissionRepository permissionRepository;
 
-    // ✅ CONSTRUCTOR REQUIRED BY TEST CASES
+    @Autowired
     public RolePermissionServiceImpl(
             RolePermissionRepository rolePermissionRepository,
             RoleRepository roleRepository,
@@ -25,11 +27,6 @@ public class RolePermissionServiceImpl implements RolePermissionService {
         this.rolePermissionRepository = rolePermissionRepository;
         this.roleRepository = roleRepository;
         this.permissionRepository = permissionRepository;
-    }
-
-    // ✅ CONSTRUCTOR USED BY SPRING (AUTOWIRING)
-    public RolePermissionServiceImpl(RolePermissionRepository rolePermissionRepository) {
-        this(rolePermissionRepository, null, null);
     }
 
     @Override
