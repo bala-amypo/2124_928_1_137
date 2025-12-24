@@ -13,7 +13,6 @@ public class UserAccount {
     private String email;
     private String fullName;
     private String password;
-
     private boolean active = true;
 
     private LocalDateTime createdAt;
@@ -21,13 +20,11 @@ public class UserAccount {
 
     public UserAccount() {}
 
-    /* ---------- getters & setters ---------- */
-
     public Long getId() {
         return id;
     }
 
-    public void setId(Long id) {   // REQUIRED BY TEST
+    public void setId(Long id) {   // REQUIRED
         this.id = id;
     }
 
@@ -35,8 +32,20 @@ public class UserAccount {
         return email;
     }
 
+    public boolean isActive() {
+        return active;
+    }
+
+    public boolean getActive() {   // FIX
+        return active;
+    }
+
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
     }
 
     public String getFullName() {
@@ -47,20 +56,8 @@ public class UserAccount {
         this.fullName = fullName;
     }
 
-    public String getPassword() {
-        return password;
-    }
-
     public void setPassword(String password) {
         this.password = password;
-    }
-
-    public boolean isActive() {    // REQUIRED BY TEST
-        return active;
-    }
-
-    public void setActive(boolean active) {
-        this.active = active;
     }
 
     public LocalDateTime getCreatedAt() {
@@ -71,16 +68,14 @@ public class UserAccount {
         return updatedAt;
     }
 
-    /* ---------- lifecycle ---------- */
-
     @PrePersist
-    public void prePersist() {     // REQUIRED BY TEST
+    public void prePersist() {
         createdAt = LocalDateTime.now();
         updatedAt = LocalDateTime.now();
     }
 
     @PreUpdate
-    public void preUpdate() {      // REQUIRED BY TEST
+    public void preUpdate() {
         updatedAt = LocalDateTime.now();
     }
 }

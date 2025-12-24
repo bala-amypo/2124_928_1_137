@@ -9,7 +9,8 @@ public class Permission {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String permissionName;
+    private String permissionKey;
+    private String description;
     private boolean active = true;
 
     public Permission() {}
@@ -22,15 +23,27 @@ public class Permission {
         this.id = id;
     }
 
-    public String getPermissionName() {
-        return permissionName;
+    public String getPermissionKey() {   // FIX
+        return permissionKey;
     }
 
-    public void setPermissionName(String permissionName) {
-        this.permissionName = permissionName;
+    public void setPermissionKey(String permissionKey) {
+        this.permissionKey = permissionKey;
     }
 
-    public boolean isActive() {    // REQUIRED
+    public String getDescription() {     // FIX
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public boolean isActive() {
+        return active;
+    }
+
+    public boolean getActive() {          // FIX (tests use getActive)
         return active;
     }
 

@@ -35,12 +35,16 @@ public class Role {
         return description;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
+    public boolean isActive() {
+        return active;
     }
 
-    public boolean isActive() {    // REQUIRED
+    public boolean getActive() {   // FIX
         return active;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public void setActive(boolean active) {
