@@ -30,4 +30,14 @@ public class RoleServiceImpl implements RoleService {
     public List<Role> getAll() {
         return roleRepository.findAll();
     }
+
+    @Override
+    public Role deactivateRole(Long id) {
+        Role role = roleRepository.findById(id).orElse(null);
+        if (role != null) {
+            role.setActive(false);   // IMPORTANT
+            return roleRepository.save(role);
+        }
+        return null;
+    }
 }
