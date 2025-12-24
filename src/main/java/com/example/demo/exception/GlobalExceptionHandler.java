@@ -1,35 +1,18 @@
-package com.example.demo.entity;
+package com.example.demo.exception;
 
-import jakarta.persistence.*;
-import java.time.Instant;
+import org.springframework.http.*;
+import org.springframework.web.bind.annotation.*;
 
-@Entity
-@Table(name = "role_permissions")
-public class RolePermission {
+@RestControllerAdvice
+public class GlobalExceptionHandler {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
-    @ManyToOne(optional = false)
-    private Role role;
-
-    @ManyToOne(optional = false)
-    private Permission permission;
-
-    private Instant grantedAt;
-
-    public RolePermission() {}
-
-    public RolePermission(Role role, Permission permission) {
-        this.role = role;
-        this.permission = permission;
+    @ExceptionHandler(ResourceNotFoundException.class)
+    public ResponseEntity<String> handleNotFound(ResourceNotFoundException ex) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(ex.getMessage());
     }
 
-    @PrePersist
-    public void onGrant() {
-        grantedAt = Instant.now();
+    @ExceptionHandler(BadRequestException.class)
+    public ResponseEntity<String> handleBadRequest(BadRequestException ex) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ex.getMessage());
     }
-
-    // getters and setters
 }

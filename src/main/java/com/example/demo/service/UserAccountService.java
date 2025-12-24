@@ -1,10 +1,9 @@
 package com.example.demo.service;
 
-import com.example.demo.entity.UserAccount;
 import java.util.List;
+import com.example.demo.entity.UserAccount;
 
 public interface UserAccountService {
-
     UserAccount createUser(UserAccount user);
     UserAccount updateUser(Long id, UserAccount user);
     UserAccount getUserById(Long id);
