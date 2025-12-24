@@ -12,19 +12,14 @@ public class RolePermissionServiceImpl implements RolePermissionService {
 
     private final RolePermissionRepository repository;
 
-    // ✅ MUST HAVE ONLY THIS CONSTRUCTOR
+    // ⚠️ TEST-REQUIRED CONSTRUCTOR
     public RolePermissionServiceImpl(RolePermissionRepository repository) {
         this.repository = repository;
     }
 
     @Override
-    public RolePermission grantPermission(RolePermission rolePermission) {
-        return repository.save(rolePermission);
-    }
-
-    @Override
-    public RolePermission getMappingById(Long id) {
-        return repository.findById(id).orElse(null);
+    public RolePermission grantPermission(RolePermission mapping) {
+        return repository.save(mapping);
     }
 
     @Override
@@ -32,6 +27,11 @@ public class RolePermissionServiceImpl implements RolePermissionService {
         return repository.findAll().stream()
                 .filter(rp -> rp.getRole().getId().equals(roleId))
                 .toList();
+    }
+
+    @Override
+    public RolePermission getMappingById(Long id) {
+        return repository.findById(id).orElse(null);
     }
 
     @Override

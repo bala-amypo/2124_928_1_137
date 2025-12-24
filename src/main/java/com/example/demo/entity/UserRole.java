@@ -1,9 +1,10 @@
 package com.example.demo.entity;
 
 import jakarta.persistence.*;
-import java.time.LocalDateTime;
+import java.time.Instant;
 
 @Entity
+@Table(name = "user_roles")
 public class UserRole {
 
     @Id
@@ -16,40 +17,25 @@ public class UserRole {
     @ManyToOne
     private Role role;
 
-    private LocalDateTime assignedAt;
+    private Instant assignedAt;
 
     public UserRole() {}
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {   // REQUIRED
-        this.id = id;
-    }
-
-    public UserAccount getUser() {
-        return user;
-    }
-
-    public void setUser(UserAccount user) {
+    public UserRole(UserAccount user, Role role) {
         this.user = user;
-    }
-
-    public Role getRole() {
-        return role;
-    }
-
-    public void setRole(Role role) {
         this.role = role;
     }
 
-    public LocalDateTime getAssignedAt() {  // REQUIRED
-        return assignedAt;
+    @PrePersist
+    public void prePersist() {
+        this.assignedAt = Instant.now();
     }
 
-    @PrePersist
-    public void prePersist() {     // REQUIRED
-        assignedAt = LocalDateTime.now();
-    }
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
+
+    public UserAccount getUser() { return user; }
+    public Role getRole() { return role; }
+
+    public Instant getAssignedAt() { return assignedAt; }
 }

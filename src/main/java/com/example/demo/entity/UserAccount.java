@@ -15,9 +15,7 @@ public class UserAccount {
     private String email;
 
     private String fullName;
-
     private String password;
-
     private Boolean active = true;
 
     private Instant createdAt;
@@ -43,20 +41,19 @@ public class UserAccount {
         this.updatedAt = Instant.now();
     }
 
-    // ✅ REQUIRED BY TESTS
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
+
+    public String getEmail() { return email; }
+    public String getFullName() { return fullName; }
+
+    public String getPassword() { return password; }
+    public void setPassword(String password) { this.password = password; }
 
     public Boolean isActive() { return active; }
     public Boolean getActive() { return active; }
     public void setActive(Boolean active) { this.active = active; }
 
-    public String getPassword() { return password; }
-    public void setPassword(String password) { this.password = password; }
-
     public Instant getCreatedAt() { return createdAt; }
     public Instant getUpdatedAt() { return updatedAt; }
-
-    public String getEmail() { return email; }
-    public String getFullName() { return fullName; }
 }

@@ -1,3 +1,7 @@
+package com.example.demo.entity;
+
+import jakarta.persistence.*;
+
 @Entity
 @Table(name = "roles")
 public class Role {
@@ -23,10 +27,10 @@ public class Role {
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 
+    public String getRoleName() { return roleName; }
+    public String getDescription() { return description; }
+
     public Boolean isActive() { return active; }
     public Boolean getActive() { return active; }
     public void setActive(Boolean active) { this.active = active; }
-
-    public String getRoleName() { return roleName; }
-    public String getDescription() { return description; }
 }

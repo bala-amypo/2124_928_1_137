@@ -1,3 +1,7 @@
+package com.example.demo.entity;
+
+import jakarta.persistence.*;
+
 @Entity
 @Table(name = "permissions")
 public class Permission {
@@ -14,19 +18,19 @@ public class Permission {
 
     public Permission() {}
 
-    public Permission(String key, String desc, Boolean active) {
-        this.permissionKey = key;
-        this.description = desc;
+    public Permission(String permissionKey, String description, Boolean active) {
+        this.permissionKey = permissionKey;
+        this.description = description;
         this.active = active != null ? active : true;
     }
 
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 
+    public String getPermissionKey() { return permissionKey; }
+    public String getDescription() { return description; }
+
     public Boolean isActive() { return active; }
     public Boolean getActive() { return active; }
     public void setActive(Boolean active) { this.active = active; }
-
-    public String getPermissionKey() { return permissionKey; }
-    public String getDescription() { return description; }
 }
