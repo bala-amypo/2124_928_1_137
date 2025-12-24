@@ -24,7 +24,7 @@ public class UserAccount {
         return id;
     }
 
-    public void setId(Long id) {   // REQUIRED
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -32,24 +32,24 @@ public class UserAccount {
         return email;
     }
 
+    public String getFullName() {
+        return fullName;
+    }
+
+    public String getPassword() {   // ✅ FIX (SECURITY + AUTH)
+        return password;
+    }
+
     public boolean isActive() {
         return active;
     }
 
-    public boolean getActive() {   // FIX
+    public boolean getActive() {
         return active;
     }
 
     public void setEmail(String email) {
         this.email = email;
-    }
-
-    public void setActive(boolean active) {
-        this.active = active;
-    }
-
-    public String getFullName() {
-        return fullName;
     }
 
     public void setFullName(String fullName) {
@@ -58,6 +58,10 @@ public class UserAccount {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
     }
 
     public LocalDateTime getCreatedAt() {
