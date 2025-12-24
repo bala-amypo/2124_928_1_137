@@ -7,6 +7,5 @@ import java.util.List;
 
 public interface RolePermissionRepository extends JpaRepository<RolePermission, Long> {
 
-    // ✅ REQUIRED by service + tests
-    List<RolePermission> findByRoleId(Long roleId);
+    List<RolePermission> findByRole_Id(long roleId);
 }
