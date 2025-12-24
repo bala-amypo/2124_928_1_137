@@ -1,8 +1,6 @@
 package com.example.demo.controller;
 
 import java.util.List;
-
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import com.example.demo.entity.Permission;
@@ -12,17 +10,10 @@ import com.example.demo.service.PermissionService;
 @RequestMapping("/api/permissions")
 public class PermissionController {
 
-    @Autowired
-    private PermissionService service;
+    private final PermissionService service;
 
-    @GetMapping
-    public List<Permission> getAll() {
-        return service.getAllPermissions();
-    }
-
-    @GetMapping("/{id}")
-    public Permission getById(@PathVariable Long id) {
-        return service.getPermissionById(id);
+    public PermissionController(PermissionService service) {
+        this.service = service;
     }
 
     @PostMapping
@@ -31,12 +22,23 @@ public class PermissionController {
     }
 
     @PutMapping("/{id}")
-    public Permission update(@PathVariable Long id, @RequestBody Permission permission) {
+    public Permission update(@PathVariable Long id,
+                             @RequestBody Permission permission) {
         return service.updatePermission(id, permission);
     }
 
-    @DeleteMapping("/{id}")
-    public void delete(@PathVariable Long id) {
-        service.deletePermission(id);
+    @GetMapping("/{id}")
+    public Permission get(@PathVariable Long id) {
+        return service.getPermissionById(id);
+    }
+
+    @GetMapping
+    public List<Permission> getAll() {
+        return service.getAllPermissions();
+    }
+
+    @PutMapping("/{id}/deactivate")
+    public void deactivate(@PathVariable Long id) {
+        service.deactivatePermission(id);
     }
 }
