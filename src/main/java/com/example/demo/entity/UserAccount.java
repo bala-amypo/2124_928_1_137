@@ -23,12 +23,6 @@ public class UserAccount {
 
     public UserAccount() {}
 
-    public UserAccount(String email, String fullName, Boolean active) {
-        this.email = email;
-        this.fullName = fullName;
-        this.active = active;
-    }
-
     @PrePersist
     public void onCreate() {
         createdAt = Instant.now();
@@ -40,7 +34,6 @@ public class UserAccount {
         updatedAt = Instant.now();
     }
 
-    // ✅ GETTERS & SETTERS
     public Long getId() { return id; }
     public String getEmail() { return email; }
     public String getFullName() { return fullName; }

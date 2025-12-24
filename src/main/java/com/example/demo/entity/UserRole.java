@@ -1,7 +1,6 @@
 package com.example.demo.entity;
 
 import jakarta.persistence.*;
-import java.time.Instant;
 
 @Entity
 @Table(name = "user_roles")
@@ -17,19 +16,12 @@ public class UserRole {
     @ManyToOne(optional = false)
     private Role role;
 
-    private Instant assignedAt;
-
     public UserRole() {}
 
-    public UserRole(UserAccount user, Role role) {
-        this.user = user;
-        this.role = role;
-    }
+    public Long getId() { return id; }
+    public UserAccount getUser() { return user; }
+    public Role getRole() { return role; }
 
-    @PrePersist
-    public void onAssign() {
-        assignedAt = Instant.now();
-    }
-
-    // getters and setters
+    public void setUser(UserAccount user) { this.user = user; }
+    public void setRole(Role role) { this.role = role; }
 }

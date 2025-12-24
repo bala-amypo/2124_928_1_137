@@ -4,8 +4,12 @@ import java.util.List;
 import com.example.demo.entity.RolePermission;
 
 public interface RolePermissionService {
+
     RolePermission grantPermission(RolePermission mapping);
-    List<RolePermission> getPermissionsForRole(Long roleId);
+
     RolePermission getMappingById(Long id);
+
+    List<RolePermission> getPermissionsForRole(Long roleId);
+
     void revokePermission(Long id);
 }
