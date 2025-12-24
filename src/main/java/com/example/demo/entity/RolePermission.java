@@ -1,43 +1,31 @@
 package com.example.demo.entity;
 
 import jakarta.persistence.*;
+import java.time.Instant;
 
 @Entity
-@Table(name = "role_permissions",
-       uniqueConstraints = @UniqueConstraint(columnNames = {"role_id", "permission_id"}))
+@Table(name = "role_permissions")
 public class RolePermission {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "role_id", nullable = false)
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "role_id")
     private Role role;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "permission_id", nullable = false)
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "permission_id")
     private Permission permission;
 
-    /* ===== getters & setters ===== */
+    @Column(nullable = false, updatable = false)
+    private Instant grantedAt;
 
-    public Long getId() {
-        return id;
+    @PrePersist
+    public void prePersist() {
+        grantedAt = Instant.now();
     }
 
-    public Role getRole() {
-        return role;
-    }
-
-    public void setRole(Role role) {
-        this.role = role;
-    }
-
-    public Permission getPermission() {
-        return permission;
-    }
-
-    public void setPermission(Permission permission) {
-        this.permission = permission;
-    }
+    // getters & setters
 }

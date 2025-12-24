@@ -1,11 +1,8 @@
 package com.example.demo.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
-import jakarta.persistence.Id;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.UniqueConstraint;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import java.util.List;
 
 @Entity
 @Table(
@@ -18,15 +15,18 @@ public class Permission {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @NotBlank
+    @Column(nullable = false, unique = true, length = 100)
     private String permissionKey;
+
+    @Column(length = 500)
     private String description;
+
+    @Column(nullable = false)
     private Boolean active = true;
 
-    public Long getId() { return id; }
-    public String getPermissionKey() { return permissionKey; }
-    public void setPermissionKey(String permissionKey) { this.permissionKey = permissionKey; }
-    public String getDescription() { return description; }
-    public void setDescription(String description) { this.description = description; }
-    public Boolean getActive() { return active; }
-    public void setActive(Boolean active) { this.active = active; }
+    @OneToMany(mappedBy = "permission", fetch = FetchType.EAGER)
+    private List<RolePermission> rolePermissions;
+
+    // getters & setters
 }

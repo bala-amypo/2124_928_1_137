@@ -1,7 +1,10 @@
 package com.example.demo.entity;
 
 import jakarta.persistence.*;
-import java.sql.Timestamp;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import java.time.Instant;
+import java.util.List;
 
 @Entity
 @Table(
@@ -14,34 +17,41 @@ public class UserAccount {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Email
+    @NotBlank
+    @Column(nullable = false, unique = true)
     private String email;
+
+    @NotBlank
+    @Column(nullable = false, length = 100)
     private String fullName;
+
+    @NotBlank
+    @Column(nullable = false)
+    private String password;
+
+    @Column(nullable = false)
     private Boolean active = true;
 
-    private Timestamp createdAt;
-    private Timestamp updatedAt;
+    @Column(nullable = false, updatable = false)
+    private Instant createdAt;
+
+    @Column(nullable = false)
+    private Instant updatedAt;
+
+    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
+    private List<UserRole> userRoles;
 
     @PrePersist
-    void onCreate() {
-        createdAt = new Timestamp(System.currentTimeMillis());
-        updatedAt = createdAt;
+    public void prePersist() {
+        createdAt = Instant.now();
+        updatedAt = Instant.now();
     }
 
     @PreUpdate
-    void onUpdate() {
-        updatedAt = new Timestamp(System.currentTimeMillis());
+    public void preUpdate() {
+        updatedAt = Instant.now();
     }
 
     // getters & setters
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
-
-    public String getEmail() { return email; }
-    public void setEmail(String email) { this.email = email; }
-
-    public String getFullName() { return fullName; }
-    public void setFullName(String fullName) { this.fullName = fullName; }
-
-    public Boolean getActive() { return active; }
-    public void setActive(Boolean active) { this.active = active; }
 }
