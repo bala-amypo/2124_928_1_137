@@ -18,17 +18,17 @@ public class RolePermissionServiceImpl implements RolePermissionService {
     }
 
     @Override
-    public RolePermission assignPermission(RolePermission rolePermission) {
+    public RolePermission grantPermission(RolePermission rolePermission) { // ✅ FIX
         return repository.save(rolePermission);
     }
 
     @Override
-    public RolePermission getById(Long id) {
+    public RolePermission getMappingById(Long id) {
         return repository.findById(id).orElse(null);
     }
 
     @Override
-    public List<RolePermission> getPermissionsForRole(Long roleId) { // ✅ FIXED
+    public List<RolePermission> getPermissionsForRole(Long roleId) {
         return repository.findAll().stream()
                 .filter(rp -> rp.getRole().getId().equals(roleId))
                 .collect(Collectors.toList());

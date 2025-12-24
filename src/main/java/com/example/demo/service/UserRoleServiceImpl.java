@@ -1,11 +1,13 @@
 package com.example.demo.service.impl;
 
+import com.example.demo.entity.Role;
 import com.example.demo.entity.UserRole;
 import com.example.demo.repository.UserRoleRepository;
 import com.example.demo.service.UserRoleService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class UserRoleServiceImpl implements UserRoleService {
@@ -25,15 +27,16 @@ public class UserRoleServiceImpl implements UserRoleService {
     }
 
     @Override
-    public UserRole getMappingById(Long id) {   // ✅ FIX
+    public UserRole getMappingById(Long id) {
         return repository.findById(id).orElse(null);
     }
 
     @Override
-    public List<UserRole> getByUserId(Long userId) {
+    public List<Role> getRolesForUser(Long userId) {   // ✅ FIX
         return repository.findAll().stream()
                 .filter(ur -> ur.getUser().getId().equals(userId))
-                .toList();
+                .map(UserRole::getRole)
+                .collect(Collectors.toList());
     }
 
     @Override

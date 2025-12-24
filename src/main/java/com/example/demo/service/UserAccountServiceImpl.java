@@ -21,7 +21,13 @@ public class UserAccountServiceImpl implements UserAccountService {
     }
 
     @Override
-    public UserAccount getUserById(Long id) {   // ✅ FIX
+    public UserAccount createUser(UserAccount user) {
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        return repository.save(user);
+    }
+
+    @Override
+    public UserAccount getUserById(Long id) {
         return repository.findById(id).orElse(null);
     }
 
@@ -31,9 +37,12 @@ public class UserAccountServiceImpl implements UserAccountService {
     }
 
     @Override
-    public UserAccount createUser(UserAccount user) {
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
-        return repository.save(user);
+    public UserAccount updateUser(Long id, UserAccount updated) { // ✅ FIX
+        return repository.findById(id).map(existing -> {
+            existing.setEmail(updated.getEmail());
+            existing.setFullName(updated.getFullName());
+            return repository.save(existing);
+        }).orElse(null);
     }
 
     @Override
