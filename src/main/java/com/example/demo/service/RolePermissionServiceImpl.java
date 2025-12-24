@@ -1,6 +1,5 @@
 package com.example.demo.service.impl;
 
-import com.example.demo.entity.Permission;
 import com.example.demo.entity.RolePermission;
 import com.example.demo.repository.RolePermissionRepository;
 import com.example.demo.service.RolePermissionService;
@@ -19,15 +18,24 @@ public class RolePermissionServiceImpl implements RolePermissionService {
     }
 
     @Override
-    public void revokePermission(Long id) {
-        repository.deleteById(id);
+    public RolePermission assignPermission(RolePermission rolePermission) {
+        return repository.save(rolePermission);
     }
 
     @Override
-    public List<Permission> getPermissionsForRole(Long roleId) { // ✅ FIX
+    public RolePermission getById(Long id) {
+        return repository.findById(id).orElse(null);
+    }
+
+    @Override
+    public List<RolePermission> getPermissionsForRole(Long roleId) { // ✅ FIXED
         return repository.findAll().stream()
                 .filter(rp -> rp.getRole().getId().equals(roleId))
-                .map(RolePermission::getPermission)
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public void revokePermission(Long id) {
+        repository.deleteById(id);
     }
 }

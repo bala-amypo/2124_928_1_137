@@ -21,15 +21,26 @@ public class UserAccountServiceImpl implements UserAccountService {
     }
 
     @Override
+    public UserAccount getUserById(Long id) {   // ✅ FIX
+        return repository.findById(id).orElse(null);
+    }
+
+    @Override
+    public List<UserAccount> getAllUsers() {
+        return repository.findAll();
+    }
+
+    @Override
+    public UserAccount createUser(UserAccount user) {
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        return repository.save(user);
+    }
+
+    @Override
     public void deactivateUser(Long id) {
         repository.findById(id).ifPresent(user -> {
             user.setActive(false);
             repository.save(user);
         });
-    }
-
-    @Override
-    public List<UserAccount> getAllUsers() {   // ✅ FIX
-        return repository.findAll();
     }
 }
