@@ -16,7 +16,6 @@ public class RolePermissionServiceImpl implements RolePermissionService {
     private final RoleRepository roleRepository;
     private final PermissionRepository permissionRepository;
 
-    // ✅ EXACT constructor expected by tests
     public RolePermissionServiceImpl(
             RolePermissionRepository rolePermissionRepository,
             RoleRepository roleRepository,
@@ -28,12 +27,22 @@ public class RolePermissionServiceImpl implements RolePermissionService {
     }
 
     @Override
-    public RolePermission assignPermission(RolePermission rp) {
-        return rolePermissionRepository.save(rp);
+    public RolePermission grantPermission(RolePermission rolePermission) {
+        return rolePermissionRepository.save(rolePermission);
     }
 
     @Override
-    public List<RolePermission> getPermissionsByRoleId(Long roleId) {
+    public RolePermission getMappingById(Long id) {
+        return rolePermissionRepository.findById(id).orElse(null);
+    }
+
+    @Override
+    public List<RolePermission> getPermissionsForRole(Long roleId) {
         return rolePermissionRepository.findByRoleId(roleId);
+    }
+
+    @Override
+    public void revokePermission(Long id) {
+        rolePermissionRepository.deleteById(id);
     }
 }

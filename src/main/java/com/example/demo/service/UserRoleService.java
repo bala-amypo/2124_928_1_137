@@ -8,8 +8,9 @@ public interface UserRoleService {
 
     UserRole assignRole(UserRole userRole);
 
-    List<UserRole> getRolesByUserId(Long userId);
+    UserRole getMappingById(Long id);
 
-    // ✅ REQUIRED by compiler
-    void removeRole(Long userRoleId);
+    List<UserRole> getRolesForUser(Long userId);
+
+    void removeRole(Long id);
 }

@@ -16,7 +16,6 @@ public class UserRoleServiceImpl implements UserRoleService {
     private final UserAccountRepository userAccountRepository;
     private final RoleRepository roleRepository;
 
-    // ✅ EXACT constructor expected by tests
     public UserRoleServiceImpl(
             UserRoleRepository userRoleRepository,
             UserAccountRepository userAccountRepository,
@@ -33,13 +32,17 @@ public class UserRoleServiceImpl implements UserRoleService {
     }
 
     @Override
-    public List<UserRole> getRolesByUserId(Long userId) {
-        return userRoleRepository.findByUserId(userId);
+    public UserRole getMappingById(Long id) {
+        return userRoleRepository.findById(id).orElse(null);
     }
 
-    // ✅ REQUIRED by interface
     @Override
-    public void removeRole(Long userRoleId) {
-        userRoleRepository.deleteById(userRoleId);
+    public List<UserRole> getRolesForUser(Long userId) {
+        return userRoleRepository.findByUser_Id(userId);
+    }
+
+    @Override
+    public void removeRole(Long id) {
+        userRoleRepository.deleteById(id);
     }
 }

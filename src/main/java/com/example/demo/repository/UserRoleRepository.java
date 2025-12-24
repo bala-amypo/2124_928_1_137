@@ -7,6 +7,6 @@ import java.util.List;
 
 public interface UserRoleRepository extends JpaRepository<UserRole, Long> {
 
-    // ✅ REQUIRED by service + tests
-    List<UserRole> findByUserId(Long userId);
+    // ✅ REQUIRED for CustomUserDetailsService
+    List<UserRole> findByUser_Id(Long userId);
 }

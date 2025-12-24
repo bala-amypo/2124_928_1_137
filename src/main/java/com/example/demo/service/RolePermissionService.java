@@ -6,10 +6,11 @@ import java.util.List;
 
 public interface RolePermissionService {
 
-    RolePermission assignPermission(RolePermission rolePermission);
+    RolePermission grantPermission(RolePermission rolePermission);
 
-    List<RolePermission> getPermissionsByRoleId(Long roleId);
+    RolePermission getMappingById(Long id);
 
-    // ✅ REQUIRED by compiler
-    void revokePermission(Long rolePermissionId);
+    List<RolePermission> getPermissionsForRole(Long roleId);
+
+    void revokePermission(Long id);
 }
