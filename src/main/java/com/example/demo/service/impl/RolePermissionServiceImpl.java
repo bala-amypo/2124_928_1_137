@@ -1,5 +1,7 @@
 package com.example.demo.service.impl;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -8,8 +10,6 @@ import com.example.demo.repository.PermissionRepository;
 import com.example.demo.repository.RolePermissionRepository;
 import com.example.demo.repository.RoleRepository;
 import com.example.demo.service.RolePermissionService;
-
-import java.util.List;
 
 @Service
 public class RolePermissionServiceImpl implements RolePermissionService {
