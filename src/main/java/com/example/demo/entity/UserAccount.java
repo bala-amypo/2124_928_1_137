@@ -4,10 +4,7 @@ import jakarta.persistence.*;
 import java.time.Instant;
 
 @Entity
-@Table(
-    name = "user_accounts",
-    uniqueConstraints = @UniqueConstraint(columnNames = "email")
-)
+@Table(name = "user_accounts", uniqueConstraints = @UniqueConstraint(columnNames = "email"))
 public class UserAccount {
 
     @Id
@@ -18,9 +15,7 @@ public class UserAccount {
     private String email;
 
     private String fullName;
-
     private String password;
-
     private Boolean active = true;
 
     private Instant createdAt;
@@ -45,5 +40,15 @@ public class UserAccount {
         updatedAt = Instant.now();
     }
 
-    // getters and setters
+    // ✅ GETTERS & SETTERS
+    public Long getId() { return id; }
+    public String getEmail() { return email; }
+    public String getFullName() { return fullName; }
+    public String getPassword() { return password; }
+    public Boolean getActive() { return active; }
+
+    public void setEmail(String email) { this.email = email; }
+    public void setFullName(String fullName) { this.fullName = fullName; }
+    public void setPassword(String password) { this.password = password; }
+    public void setActive(Boolean active) { this.active = active; }
 }
