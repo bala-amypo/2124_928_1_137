@@ -1,46 +1,39 @@
 package com.example.demo.service.impl;
 
-import java.util.List;
-
-import org.springframework.stereotype.Service;
-
 import com.example.demo.entity.UserAccount;
 import com.example.demo.exception.BadRequestException;
 import com.example.demo.exception.ResourceNotFoundException;
 import com.example.demo.repository.UserAccountRepository;
 import com.example.demo.service.UserAccountService;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
+import java.util.List;
 
 @Service
 public class UserAccountServiceImpl implements UserAccountService {
 
     private final UserAccountRepository repository;
+    private final PasswordEncoder passwordEncoder;
 
-    public UserAccountServiceImpl(UserAccountRepository repository) {
+    public UserAccountServiceImpl(UserAccountRepository repository,
+                                  PasswordEncoder passwordEncoder) {
         this.repository = repository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
     public UserAccount createUser(UserAccount user) {
-
-        if (user.getId() != null) {
-            throw new BadRequestException("ID must not be provided while creating user");
-        }
-
         if (repository.existsByEmail(user.getEmail())) {
             throw new BadRequestException("Email already exists");
         }
-
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         return repository.save(user);
     }
 
     @Override
     public UserAccount updateUser(Long id, UserAccount user) {
-        UserAccount existing = repository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
-
-        existing.setEmail(user.getEmail());
+        UserAccount existing = getUserById(id);
         existing.setFullName(user.getFullName());
-
         return repository.save(existing);
     }
 
@@ -57,8 +50,7 @@ public class UserAccountServiceImpl implements UserAccountService {
 
     @Override
     public void deactivateUser(Long id) {
-        UserAccount user = repository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+        UserAccount user = getUserById(id);
         user.setActive(false);
         repository.save(user);
     }
