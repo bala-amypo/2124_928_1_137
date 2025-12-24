@@ -12,20 +12,24 @@ public class RolePermission {
     private Long id;
 
     @ManyToOne(optional = false)
-    @JoinColumn(name = "role_id")
     private Role role;
 
     @ManyToOne(optional = false)
-    @JoinColumn(name = "permission_id")
     private Permission permission;
 
-    @Column(nullable = false, updatable = false)
     private Instant grantedAt;
 
+    public RolePermission() {}
+
+    public RolePermission(Role role, Permission permission) {
+        this.role = role;
+        this.permission = permission;
+    }
+
     @PrePersist
-    public void prePersist() {
+    public void onGrant() {
         grantedAt = Instant.now();
     }
 
-    // getters & setters
+    // getters and setters
 }

@@ -12,20 +12,24 @@ public class UserRole {
     private Long id;
 
     @ManyToOne(optional = false)
-    @JoinColumn(name = "user_id")
     private UserAccount user;
 
     @ManyToOne(optional = false)
-    @JoinColumn(name = "role_id")
     private Role role;
 
-    @Column(nullable = false, updatable = false)
     private Instant assignedAt;
 
+    public UserRole() {}
+
+    public UserRole(UserAccount user, Role role) {
+        this.user = user;
+        this.role = role;
+    }
+
     @PrePersist
-    public void prePersist() {
+    public void onAssign() {
         assignedAt = Instant.now();
     }
 
-    // getters & setters
+    // getters and setters
 }

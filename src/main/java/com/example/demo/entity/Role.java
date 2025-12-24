@@ -1,8 +1,6 @@
 package com.example.demo.entity;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
-import java.util.List;
 
 @Entity
 @Table(
@@ -15,21 +13,17 @@ public class Role {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @NotBlank
-    @Column(nullable = false, unique = true, length = 50)
     private String roleName;
-
-    @Column(length = 500)
     private String description;
-
-    @Column(nullable = false)
     private Boolean active = true;
 
-    @OneToMany(mappedBy = "role", fetch = FetchType.EAGER)
-    private List<UserRole> userRoles;
+    public Role() {}
 
-    @OneToMany(mappedBy = "role", fetch = FetchType.EAGER)
-    private List<RolePermission> rolePermissions;
+    public Role(String roleName, String description, Boolean active) {
+        this.roleName = roleName;
+        this.description = description;
+        this.active = active;
+    }
 
-    // getters & setters
+    // getters and setters
 }

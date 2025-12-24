@@ -1,10 +1,7 @@
 package com.example.demo.entity;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
 import java.time.Instant;
-import java.util.List;
 
 @Entity
 @Table(
@@ -17,41 +14,36 @@ public class UserAccount {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Email
-    @NotBlank
     @Column(nullable = false, unique = true)
     private String email;
 
-    @NotBlank
-    @Column(nullable = false, length = 100)
     private String fullName;
 
-    @NotBlank
-    @Column(nullable = false)
     private String password;
 
-    @Column(nullable = false)
     private Boolean active = true;
 
-    @Column(nullable = false, updatable = false)
     private Instant createdAt;
-
-    @Column(nullable = false)
     private Instant updatedAt;
 
-    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
-    private List<UserRole> userRoles;
+    public UserAccount() {}
+
+    public UserAccount(String email, String fullName, Boolean active) {
+        this.email = email;
+        this.fullName = fullName;
+        this.active = active;
+    }
 
     @PrePersist
-    public void prePersist() {
+    public void onCreate() {
         createdAt = Instant.now();
         updatedAt = Instant.now();
     }
 
     @PreUpdate
-    public void preUpdate() {
+    public void onUpdate() {
         updatedAt = Instant.now();
     }
 
-    // getters & setters
+    // getters and setters
 }
