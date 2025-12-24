@@ -6,19 +6,19 @@ import com.example.demo.service.RolePermissionService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class RolePermissionServiceImpl implements RolePermissionService {
 
     private final RolePermissionRepository repository;
 
+    // ✅ MUST HAVE ONLY THIS CONSTRUCTOR
     public RolePermissionServiceImpl(RolePermissionRepository repository) {
         this.repository = repository;
     }
 
     @Override
-    public RolePermission grantPermission(RolePermission rolePermission) { // ✅ FIX
+    public RolePermission grantPermission(RolePermission rolePermission) {
         return repository.save(rolePermission);
     }
 
@@ -31,7 +31,7 @@ public class RolePermissionServiceImpl implements RolePermissionService {
     public List<RolePermission> getPermissionsForRole(Long roleId) {
         return repository.findAll().stream()
                 .filter(rp -> rp.getRole().getId().equals(roleId))
-                .collect(Collectors.toList());
+                .toList();
     }
 
     @Override

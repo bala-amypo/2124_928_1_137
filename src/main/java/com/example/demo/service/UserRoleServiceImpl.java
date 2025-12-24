@@ -6,18 +6,17 @@ import com.example.demo.service.UserRoleService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class UserRoleServiceImpl implements UserRoleService {
 
     private final UserRoleRepository repository;
 
+    // ✅ ONLY ONE CONSTRUCTOR
     public UserRoleServiceImpl(UserRoleRepository repository) {
         this.repository = repository;
     }
 
-    // ✅ FIXED METHOD NAME (must match interface EXACTLY)
     @Override
     public UserRole assignRole(UserRole userRole) {
         if (!userRole.getUser().getActive() || !userRole.getRole().getActive()) {
@@ -35,7 +34,7 @@ public class UserRoleServiceImpl implements UserRoleService {
     public List<UserRole> getRolesForUser(Long userId) {
         return repository.findAll().stream()
                 .filter(ur -> ur.getUser().getId().equals(userId))
-                .collect(Collectors.toList());
+                .toList();
     }
 
     @Override
