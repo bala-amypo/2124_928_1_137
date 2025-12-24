@@ -1,6 +1,8 @@
 package com.example.demo.service.impl;
 
 import com.example.demo.entity.UserRole;
+import com.example.demo.repository.RoleRepository;
+import com.example.demo.repository.UserAccountRepository;
 import com.example.demo.repository.UserRoleRepository;
 import com.example.demo.service.UserRoleService;
 import org.springframework.stereotype.Service;
@@ -10,32 +12,28 @@ import java.util.List;
 @Service
 public class UserRoleServiceImpl implements UserRoleService {
 
-    private final UserRoleRepository repository;
+    private final UserRoleRepository userRoleRepository;
+    private final UserAccountRepository userAccountRepository;
+    private final RoleRepository roleRepository;
 
-    // ⚠️ TEST-REQUIRED CONSTRUCTOR
-    public UserRoleServiceImpl(UserRoleRepository repository) {
-        this.repository = repository;
+    // ✅ EXACT constructor expected by tests
+    public UserRoleServiceImpl(
+            UserRoleRepository userRoleRepository,
+            UserAccountRepository userAccountRepository,
+            RoleRepository roleRepository
+    ) {
+        this.userRoleRepository = userRoleRepository;
+        this.userAccountRepository = userAccountRepository;
+        this.roleRepository = roleRepository;
     }
 
     @Override
-    public UserRole assignRole(UserRole mapping) {
-        return repository.save(mapping);
+    public UserRole assignRole(UserRole userRole) {
+        return userRoleRepository.save(userRole);
     }
 
     @Override
-    public List<UserRole> getRolesForUser(Long userId) {
-        return repository.findAll().stream()
-                .filter(ur -> ur.getUser().getId().equals(userId))
-                .toList();
-    }
-
-    @Override
-    public UserRole getMappingById(Long id) {
-        return repository.findById(id).orElse(null);
-    }
-
-    @Override
-    public void removeRole(Long id) {
-        repository.deleteById(id);
+    public List<UserRole> getRolesByUserId(Long userId) {
+        return userRoleRepository.findByUserId(userId);
     }
 }

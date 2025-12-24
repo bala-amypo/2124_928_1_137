@@ -1,7 +1,9 @@
 package com.example.demo.service.impl;
 
 import com.example.demo.entity.RolePermission;
+import com.example.demo.repository.PermissionRepository;
 import com.example.demo.repository.RolePermissionRepository;
+import com.example.demo.repository.RoleRepository;
 import com.example.demo.service.RolePermissionService;
 import org.springframework.stereotype.Service;
 
@@ -10,32 +12,28 @@ import java.util.List;
 @Service
 public class RolePermissionServiceImpl implements RolePermissionService {
 
-    private final RolePermissionRepository repository;
+    private final RolePermissionRepository rolePermissionRepository;
+    private final RoleRepository roleRepository;
+    private final PermissionRepository permissionRepository;
 
-    // ⚠️ TEST-REQUIRED CONSTRUCTOR
-    public RolePermissionServiceImpl(RolePermissionRepository repository) {
-        this.repository = repository;
+    // ✅ EXACT constructor expected by tests
+    public RolePermissionServiceImpl(
+            RolePermissionRepository rolePermissionRepository,
+            RoleRepository roleRepository,
+            PermissionRepository permissionRepository
+    ) {
+        this.rolePermissionRepository = rolePermissionRepository;
+        this.roleRepository = roleRepository;
+        this.permissionRepository = permissionRepository;
     }
 
     @Override
-    public RolePermission grantPermission(RolePermission mapping) {
-        return repository.save(mapping);
+    public RolePermission assignPermission(RolePermission rp) {
+        return rolePermissionRepository.save(rp);
     }
 
     @Override
-    public List<RolePermission> getPermissionsForRole(Long roleId) {
-        return repository.findAll().stream()
-                .filter(rp -> rp.getRole().getId().equals(roleId))
-                .toList();
-    }
-
-    @Override
-    public RolePermission getMappingById(Long id) {
-        return repository.findById(id).orElse(null);
-    }
-
-    @Override
-    public void revokePermission(Long id) {
-        repository.deleteById(id);
+    public List<RolePermission> getPermissionsByRoleId(Long roleId) {
+        return rolePermissionRepository.findByRoleId(roleId);
     }
 }
