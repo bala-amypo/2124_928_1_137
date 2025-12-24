@@ -1,4 +1,4 @@
-package com.example.demo.service.impl;
+package com.example.demo.service;
 
 import java.util.HashMap;
 import org.springframework.security.crypto.password.PasswordEncoder;

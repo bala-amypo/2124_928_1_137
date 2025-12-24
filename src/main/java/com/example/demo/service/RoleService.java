@@ -5,11 +5,13 @@ import java.util.List;
 
 public interface RoleService {
 
-    Role create(Role role);
+    Role createRole(Role role);
 
-    Role getById(Long id);
+    Role updateRole(Long id, Role role);
 
-    List<Role> getAll();
+    Role getRoleById(Long id);
 
-    Role deactivateRole(Long id);
+    List<Role> getAllRoles();
+
+    void deactivateRole(Long id);
 }
