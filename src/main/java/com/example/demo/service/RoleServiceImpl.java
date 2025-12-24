@@ -1,55 +1,45 @@
 package com.example.demo.service.impl;
 
-import java.util.List;
-
+import com.example.demo.entity.RolePermission;
+import com.example.demo.repository.PermissionRepository;
+import com.example.demo.repository.RolePermissionRepository;
+import com.example.demo.repository.RoleRepository;
+import com.example.demo.service.RolePermissionService;
 import org.springframework.stereotype.Service;
 
-import com.example.demo.entity.Role;
-import com.example.demo.exception.BadRequestException;
-import com.example.demo.exception.ResourceNotFoundException;
-import com.example.demo.repository.RoleRepository;
-import com.example.demo.service.RoleService;
+import java.util.List;
 
 @Service
-public class RoleServiceImpl implements RoleService {
+public class RolePermissionServiceImpl implements RolePermissionService {
 
-    private final RoleRepository repository;
+    private final RolePermissionRepository rolePermissionRepository;
+    private final RoleRepository roleRepository;
+    private final PermissionRepository permissionRepository;
 
-    public RoleServiceImpl(RoleRepository repository) {
-        this.repository = repository;
+    // ✅ EXACT constructor expected by tests
+    public RolePermissionServiceImpl(
+            RolePermissionRepository rolePermissionRepository,
+            RoleRepository roleRepository,
+            PermissionRepository permissionRepository
+    ) {
+        this.rolePermissionRepository = rolePermissionRepository;
+        this.roleRepository = roleRepository;
+        this.permissionRepository = permissionRepository;
     }
 
     @Override
-    public Role createRole(Role role) {
-        repository.findByRoleName(role.getRoleName()).ifPresent(r -> {
-            throw new BadRequestException("Role already exists");
-        });
-        return repository.save(role);
+    public RolePermission assignPermission(RolePermission rolePermission) {
+        return rolePermissionRepository.save(rolePermission);
     }
 
     @Override
-    public Role updateRole(Long id, Role role) {
-        Role existing = getRoleById(id);
-        existing.setRoleName(role.getRoleName());
-        existing.setDescription(role.getDescription());
-        return repository.save(existing);
+    public List<RolePermission> getPermissionsByRoleId(Long roleId) {
+        return rolePermissionRepository.findByRoleId(roleId);
     }
 
+    // ✅ REQUIRED by interface
     @Override
-    public Role getRoleById(Long id) {
-        return repository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Role not found"));
-    }
-
-    @Override
-    public List<Role> getAllRoles() {
-        return repository.findAll();
-    }
-
-    @Override
-    public void deactivateRole(Long id) {
-        Role role = getRoleById(id);
-        role.setActive(false);
-        repository.save(role);
+    public void revokePermission(Long rolePermissionId) {
+        rolePermissionRepository.deleteById(rolePermissionId);
     }
 }

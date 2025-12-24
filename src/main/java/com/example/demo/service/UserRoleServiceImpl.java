@@ -36,4 +36,10 @@ public class UserRoleServiceImpl implements UserRoleService {
     public List<UserRole> getRolesByUserId(Long userId) {
         return userRoleRepository.findByUserId(userId);
     }
+
+    // ✅ REQUIRED by interface
+    @Override
+    public void removeRole(Long userRoleId) {
+        userRoleRepository.deleteById(userRoleId);
+    }
 }

@@ -1,13 +1,12 @@
 package com.example.demo.repository;
 
-import java.util.List;
+import com.example.demo.entity.UserRole;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import com.example.demo.entity.*;
+import java.util.List;
 
 public interface UserRoleRepository extends JpaRepository<UserRole, Long> {
 
-    List<UserRole> findByUser_Id(Long userId);
-
-    boolean existsByUserAndRole(UserAccount user, Role role);
+    // ✅ REQUIRED by service + tests
+    List<UserRole> findByUserId(Long userId);
 }
