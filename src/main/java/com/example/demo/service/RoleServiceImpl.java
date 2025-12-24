@@ -1,45 +1,33 @@
 package com.example.demo.service.impl;
 
-import com.example.demo.entity.RolePermission;
-import com.example.demo.repository.PermissionRepository;
-import com.example.demo.repository.RolePermissionRepository;
+import com.example.demo.entity.Role;
 import com.example.demo.repository.RoleRepository;
-import com.example.demo.service.RolePermissionService;
+import com.example.demo.service.RoleService;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
-public class RolePermissionServiceImpl implements RolePermissionService {
+public class RoleServiceImpl implements RoleService {
 
-    private final RolePermissionRepository rolePermissionRepository;
     private final RoleRepository roleRepository;
-    private final PermissionRepository permissionRepository;
 
-    // ✅ EXACT constructor expected by tests
-    public RolePermissionServiceImpl(
-            RolePermissionRepository rolePermissionRepository,
-            RoleRepository roleRepository,
-            PermissionRepository permissionRepository
-    ) {
-        this.rolePermissionRepository = rolePermissionRepository;
+    public RoleServiceImpl(RoleRepository roleRepository) {
         this.roleRepository = roleRepository;
-        this.permissionRepository = permissionRepository;
     }
 
     @Override
-    public RolePermission assignPermission(RolePermission rolePermission) {
-        return rolePermissionRepository.save(rolePermission);
+    public Role create(Role role) {
+        return roleRepository.save(role);
     }
 
     @Override
-    public List<RolePermission> getPermissionsByRoleId(Long roleId) {
-        return rolePermissionRepository.findByRoleId(roleId);
+    public Role getById(Long id) {
+        return roleRepository.findById(id).orElse(null);
     }
 
-    // ✅ REQUIRED by interface
     @Override
-    public void revokePermission(Long rolePermissionId) {
-        rolePermissionRepository.deleteById(rolePermissionId);
+    public List<Role> getAll() {
+        return roleRepository.findAll();
     }
 }
