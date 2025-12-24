@@ -1,7 +1,9 @@
 package com.example.demo.service.impl;
 
 import com.example.demo.entity.RolePermission;
+import com.example.demo.repository.PermissionRepository;
 import com.example.demo.repository.RolePermissionRepository;
+import com.example.demo.repository.RoleRepository;
 import com.example.demo.service.RolePermissionService;
 import org.springframework.stereotype.Service;
 
@@ -11,9 +13,23 @@ import java.util.List;
 public class RolePermissionServiceImpl implements RolePermissionService {
 
     private final RolePermissionRepository rolePermissionRepository;
+    private final RoleRepository roleRepository;
+    private final PermissionRepository permissionRepository;
 
-    public RolePermissionServiceImpl(RolePermissionRepository rolePermissionRepository) {
+    // ✅ CONSTRUCTOR REQUIRED BY TEST CASES
+    public RolePermissionServiceImpl(
+            RolePermissionRepository rolePermissionRepository,
+            RoleRepository roleRepository,
+            PermissionRepository permissionRepository
+    ) {
         this.rolePermissionRepository = rolePermissionRepository;
+        this.roleRepository = roleRepository;
+        this.permissionRepository = permissionRepository;
+    }
+
+    // ✅ CONSTRUCTOR USED BY SPRING (AUTOWIRING)
+    public RolePermissionServiceImpl(RolePermissionRepository rolePermissionRepository) {
+        this(rolePermissionRepository, null, null);
     }
 
     @Override
@@ -28,7 +44,6 @@ public class RolePermissionServiceImpl implements RolePermissionService {
 
     @Override
     public List<RolePermission> getPermissionsForRole(Long roleId) {
-        // ✅ FIXED METHOD NAME
         return rolePermissionRepository.findByRole_Id(roleId);
     }
 
