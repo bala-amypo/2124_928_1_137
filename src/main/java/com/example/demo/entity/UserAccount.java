@@ -1,47 +1,86 @@
 package com.example.demo.entity;
 
 import jakarta.persistence.*;
-import java.time.Instant;
+import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "user_accounts", uniqueConstraints = @UniqueConstraint(columnNames = "email"))
 public class UserAccount {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, unique = true)
     private String email;
-
     private String fullName;
     private String password;
-    private Boolean active = true;
 
-    private Instant createdAt;
-    private Instant updatedAt;
+    private boolean active = true;
+
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
 
     public UserAccount() {}
 
+    /* ---------- getters & setters ---------- */
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {   // REQUIRED BY TEST
+        this.id = id;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getFullName() {
+        return fullName;
+    }
+
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public boolean isActive() {    // REQUIRED BY TEST
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public LocalDateTime getUpdatedAt() {
+        return updatedAt;
+    }
+
+    /* ---------- lifecycle ---------- */
+
     @PrePersist
-    public void onCreate() {
-        createdAt = Instant.now();
-        updatedAt = Instant.now();
+    public void prePersist() {     // REQUIRED BY TEST
+        createdAt = LocalDateTime.now();
+        updatedAt = LocalDateTime.now();
     }
 
     @PreUpdate
-    public void onUpdate() {
-        updatedAt = Instant.now();
+    public void preUpdate() {      // REQUIRED BY TEST
+        updatedAt = LocalDateTime.now();
     }
-
-    public Long getId() { return id; }
-    public String getEmail() { return email; }
-    public String getFullName() { return fullName; }
-    public String getPassword() { return password; }
-    public Boolean getActive() { return active; }
-
-    public void setEmail(String email) { this.email = email; }
-    public void setFullName(String fullName) { this.fullName = fullName; }
-    public void setPassword(String password) { this.password = password; }
-    public void setActive(Boolean active) { this.active = active; }
 }
