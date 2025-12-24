@@ -7,7 +7,6 @@
 
     <modelVersion>4.0.0</modelVersion>
 
-    <!-- Spring Boot Parent -->
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
@@ -21,7 +20,6 @@
     <name>demo</name>
     <description>SaaS User Role Permission Manager</description>
 
-    <!-- Java Version -->
     <properties>
         <java.version>17</java.version>
     </properties>
@@ -30,19 +28,16 @@
 
         <!-- ================= CORE ================= -->
 
-        <!-- Spring Boot Web -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
 
-        <!-- Spring Data JPA -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-jpa</artifactId>
         </dependency>
 
-        <!-- Spring Security -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-security</artifactId>
@@ -50,7 +45,6 @@
 
         <!-- ================= DATABASE ================= -->
 
-        <!-- MySQL JDBC Driver (FIXES com.mysql.cj.jdbc.Driver ERROR) -->
         <dependency>
             <groupId>com.mysql</groupId>
             <artifactId>mysql-connector-j</artifactId>
@@ -59,14 +53,12 @@
 
         <!-- ================= JWT ================= -->
 
-        <!-- JWT API -->
         <dependency>
             <groupId>io.jsonwebtoken</groupId>
             <artifactId>jjwt-api</artifactId>
             <version>0.11.5</version>
         </dependency>
 
-        <!-- JWT Implementation -->
         <dependency>
             <groupId>io.jsonwebtoken</groupId>
             <artifactId>jjwt-impl</artifactId>
@@ -74,7 +66,6 @@
             <scope>runtime</scope>
         </dependency>
 
-        <!-- JWT Jackson -->
         <dependency>
             <groupId>io.jsonwebtoken</groupId>
             <artifactId>jjwt-jackson</artifactId>
@@ -84,7 +75,6 @@
 
         <!-- ================= SWAGGER ================= -->
 
-        <!-- Swagger / OpenAPI (Authorize button works automatically) -->
         <dependency>
             <groupId>org.springdoc</groupId>
             <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
@@ -100,9 +90,18 @@
 
         <!-- ================= TESTING ================= -->
 
+        <!-- JUnit (Spring internal) -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <!-- ✅ REQUIRED: TESTNG (FOR AUTOGRADER) -->
+        <dependency>
+            <groupId>org.testng</groupId>
+            <artifactId>testng</artifactId>
+            <version>7.9.0</version>
             <scope>test</scope>
         </dependency>
 
@@ -117,7 +116,7 @@
     <build>
         <plugins>
 
-            <!-- Java 17 Compiler -->
+            <!-- Java 17 -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -127,7 +126,19 @@
                 </configuration>
             </plugin>
 
-            <!-- Spring Boot Run Plugin -->
+            <!-- ✅ IMPORTANT: Enable TestNG -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>3.2.5</version>
+                <configuration>
+                    <useModulePath>false</useModulePath>
+                    <suiteXmlFiles>
+                        <suiteXmlFile>testng.xml</suiteXmlFile>
+                    </suiteXmlFiles>
+                </configuration>
+            </plugin>
+
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
