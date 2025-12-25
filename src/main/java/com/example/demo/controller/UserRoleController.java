@@ -16,20 +16,29 @@ public class UserRoleController {
         this.service = service;
     }
 
+    /* ================= ASSIGN ROLE ================= */
+
     @PostMapping
     public UserRole assignRole(@RequestBody UserRole userRole) {
         return service.assignRole(userRole);
     }
 
+    /* ================= GET BY ID ================= */
+
+    // ✅ FIXED: matches service + tests
     @GetMapping("/{id}")
     public UserRole getById(@PathVariable Long id) {
-        return service.getById(id);
+        return service.getMappingById(id);
     }
+
+    /* ================= GET BY USER ================= */
 
     @GetMapping("/user/{userId}")
     public List<UserRole> getRolesForUser(@PathVariable Long userId) {
         return service.getRolesForUser(userId);
     }
+
+    /* ================= DELETE ================= */
 
     @DeleteMapping("/{id}")
     public void delete(@PathVariable Long id) {
