@@ -1,8 +1,7 @@
 package com.example.demo.entity;
 
-import java.time.Instant;
-
 import jakarta.persistence.*;
+import java.time.Instant;
 
 @Entity
 @Table(name = "user_roles")
@@ -12,31 +11,26 @@ public class UserRole {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
+    @ManyToOne(optional = false)
     @JoinColumn(name = "user_id")
     private UserAccount user;
 
-    @ManyToOne
+    @ManyToOne(optional = false)
     @JoinColumn(name = "role_id")
     private Role role;
 
-    @Column(name = "assigned_at")
     private Instant assignedAt;
 
-    // ✅ REQUIRED BY TEST
-    @PrePersist
-    public void prePersist() {
-        this.assignedAt = Instant.now();
+    public UserRole() {
     }
 
-    // ===== GETTERS & SETTERS =====
+    @PrePersist
+    public void onAssign() {
+        assignedAt = Instant.now();
+    }
 
     public Long getId() {
         return id;
-    }
-
-    public void setId(Long id) {   // ✅ REQUIRED BY TEST
-        this.id = id;
     }
 
     public UserAccount getUser() {
@@ -53,9 +47,5 @@ public class UserRole {
 
     public void setRole(Role role) {
         this.role = role;
-    }
-
-    public Instant getAssignedAt() {   // ✅ REQUIRED BY TEST
-        return assignedAt;
     }
 }

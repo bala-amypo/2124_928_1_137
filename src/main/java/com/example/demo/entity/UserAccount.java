@@ -4,14 +4,16 @@ import jakarta.persistence.*;
 import java.time.Instant;
 
 @Entity
-@Table(name = "user_accounts")
+@Table(
+    name = "user_accounts",
+    uniqueConstraints = @UniqueConstraint(columnNames = "email")
+)
 public class UserAccount {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(unique = true)
     private String email;
 
     private String fullName;
@@ -21,48 +23,56 @@ public class UserAccount {
     private Boolean active = true;
 
     private Instant createdAt;
+
     private Instant updatedAt;
 
-    public UserAccount() {}
-
-    public UserAccount(String email, String fullName, Boolean active) {
-        this.email = email;
-        this.fullName = fullName;
-        this.active = active != null ? active : true;
+    public UserAccount() {
     }
 
-    /* ---------- Lifecycle ---------- */
-
     @PrePersist
-    public void prePersist() {
-        Instant now = Instant.now();
-        this.createdAt = now;
-        this.updatedAt = now;
+    public void onCreate() {
+        createdAt = Instant.now();
+        updatedAt = Instant.now();
     }
 
     @PreUpdate
-    public void preUpdate() {
-        this.updatedAt = Instant.now();
+    public void onUpdate() {
+        updatedAt = Instant.now();
     }
 
-    /* ---------- Getters & Setters (REQUIRED BY TESTS & SERVICES) ---------- */
+    public Long getId() {
+        return id;
+    }
 
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
+    public String getEmail() {
+        return email;
+    }
 
-    public String getEmail() { return email; }
-    public void setEmail(String email) { this.email = email; }
+    public void setEmail(String email) {
+        this.email = email;
+    }
 
-    public String getFullName() { return fullName; }
-    public void setFullName(String fullName) { this.fullName = fullName; }
+    public String getFullName() {
+        return fullName;
+    }
 
-    public String getPassword() { return password; }
-    public void setPassword(String password) { this.password = password; }
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
+    }
 
-    public Boolean isActive() { return active; }
-    public Boolean getActive() { return active; }
-    public void setActive(Boolean active) { this.active = active; }
+    public String getPassword() {
+        return password;
+    }
 
-    public Instant getCreatedAt() { return createdAt; }
-    public Instant getUpdatedAt() { return updatedAt; }
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public Boolean getActive() {
+        return active;
+    }
+
+    public void setActive(Boolean active) {
+        this.active = active;
+    }
 }
