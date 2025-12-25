@@ -1,15 +1,15 @@
 package com.example.demo.service.impl;
 
-import java.time.LocalDateTime;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.demo.entity.Role;
-import com.example.demo.entity.User;
+import com.example.demo.entity.UserAccount;
 import com.example.demo.entity.UserRole;
 import com.example.demo.repository.RoleRepository;
-import com.example.demo.repository.UserRepository;
+import com.example.demo.repository.UserAccountRepository;
 import com.example.demo.repository.UserRoleRepository;
 import com.example.demo.service.UserRoleService;
 
@@ -20,52 +20,45 @@ public class UserRoleServiceImpl implements UserRoleService {
     private UserRoleRepository userRoleRepository;
 
     @Autowired
-    private UserRepository userRepository;
+    private UserAccountRepository userAccountRepository;
 
     @Autowired
     private RoleRepository roleRepository;
 
-    /**
-     * Assign role to user
-     */
+    // ✅ ASSIGN ROLE
     @Override
     public UserRole assignRole(UserRole userRole) {
 
-        // 1️⃣ Fetch User from DB
-        User user = userRepository.findById(userRole.getUser().getId())
+        UserAccount user = userAccountRepository
+                .findById(userRole.getUser().getId())
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
-        // 2️⃣ Fetch Role from DB
-        Role role = roleRepository.findById(userRole.getRole().getId())
+        Role role = roleRepository
+                .findById(userRole.getRole().getId())
                 .orElseThrow(() -> new RuntimeException("Role not found"));
 
-        // 3️⃣ Set full entities
         userRole.setUser(user);
         userRole.setRole(role);
 
-        // 4️⃣ Set assigned time (if not provided)
-        if (userRole.getAssignedAt() == null) {
-            userRole.setAssignedAt(LocalDateTime.now());
-        }
-
-        // 5️⃣ Save and return
         return userRoleRepository.save(userRole);
     }
 
-    /**
-     * Get UserRole by ID
-     */
+    // ✅ GET USER-ROLE BY ID
     @Override
-    public UserRole getUserRoleById(Long id) {
+    public UserRole getMappingById(Long id) {
         return userRoleRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("UserRole not found"));
     }
 
-    /**
-     * Delete UserRole
-     */
+    // ✅ GET ROLES FOR USER
     @Override
-    public void deleteUserRole(Long id) {
+    public List<UserRole> getRolesForUser(Long userId) {
+        return userRoleRepository.findByUserId(userId);
+    }
+
+    // ✅ DELETE ROLE MAPPING
+    @Override
+    public void removeRole(Long id) {
         userRoleRepository.deleteById(id);
     }
 }

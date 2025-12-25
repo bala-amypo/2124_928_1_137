@@ -1,7 +1,6 @@
 package com.example.demo.entity;
 
 import jakarta.persistence.*;
-import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "user_roles")
@@ -12,29 +11,16 @@ public class UserRole {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
+    @JoinColumn(name = "user_id")
     private UserAccount user;
 
     @ManyToOne
-    @JoinColumn(name = "role_id", nullable = false)
+    @JoinColumn(name = "role_id")
     private Role role;
 
-    private LocalDateTime assignedAt;
-
-    /* ---------- JPA Lifecycle ---------- */
-    @PrePersist
-    public void prePersist() {
-        this.assignedAt = LocalDateTime.now();
-    }
-
-    /* ---------- Getters & Setters ---------- */
-
+    // getters & setters
     public Long getId() {
         return id;
-    }
-
-    public void setId(long id) {   // required by test
-        this.id = id;
     }
 
     public UserAccount getUser() {
@@ -51,9 +37,5 @@ public class UserRole {
 
     public void setRole(Role role) {
         this.role = role;
-    }
-
-    public LocalDateTime getAssignedAt() {
-        return assignedAt;
     }
 }
