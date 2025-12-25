@@ -23,11 +23,13 @@ public class RolePermission {
 
     /* ================= RELATIONSHIPS ================= */
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    // 🔥 FIX: EAGER loading to avoid ByteBuddy proxy error
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "role_id", nullable = false)
     private Role role;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    // 🔥 FIX: EAGER loading to avoid ByteBuddy proxy error
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "permission_id", nullable = false)
     private Permission permission;
 
