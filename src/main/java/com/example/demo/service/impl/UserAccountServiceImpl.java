@@ -18,30 +18,54 @@ public class UserAccountServiceImpl implements UserAccountService {
         this.repository = repository;
     }
 
+    /* ================= CREATE ================= */
+
     @Override
     public UserAccount createUser(UserAccount user) {
 
-        if (repository.existsByEmail(user.getEmail())) {
+        String email = user.getEmail().toLowerCase();
+
+        if (repository.existsByEmail(email)) {
             throw new BadRequestException("Email already exists");
         }
+
+        user.setEmail(email);
         return repository.save(user);
     }
+
+    /* ================= UPDATE ================= */
 
     @Override
     public UserAccount updateUser(Long id, UserAccount user) {
 
         UserAccount existing = repository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+                .orElseThrow(() ->
+                        new ResourceNotFoundException("User not found"));
 
+        // normalize email
+        String newEmail = user.getEmail().toLowerCase();
+
+        // check duplicate email (excluding current user)
+        repository.findByEmail(newEmail)
+                .ifPresent(found -> {
+                    if (!found.getId().equals(id)) {
+                        throw new BadRequestException("Email already exists");
+                    }
+                });
+
+        existing.setEmail(newEmail);
         existing.setFullName(user.getFullName());
+
         return repository.save(existing);
     }
 
+    /* ================= GET ================= */
+
     @Override
     public UserAccount getUserById(Long id) {
-
         return repository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+                .orElseThrow(() ->
+                        new ResourceNotFoundException("User not found"));
     }
 
     @Override
@@ -49,9 +73,10 @@ public class UserAccountServiceImpl implements UserAccountService {
         return repository.findAll();
     }
 
+    /* ================= DEACTIVATE ================= */
+
     @Override
     public void deactivateUser(Long id) {
-
         UserAccount user = getUserById(id);
         user.setActive(false);
         repository.save(user);
