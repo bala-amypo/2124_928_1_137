@@ -17,11 +17,11 @@ public class UserRoleServiceImpl implements UserRoleService {
     private UserAccountRepository userAccountRepository;
     private RoleRepository roleRepository;
 
-    // ✅ REQUIRED BY SPRING
+    // ✅ Default constructor (for Spring)
     public UserRoleServiceImpl() {
     }
 
-    // ✅ REQUIRED BY TEST CASE
+    // ✅ Constructor used by TEST CASE
     public UserRoleServiceImpl(
             UserRoleRepository userRoleRepository,
             UserAccountRepository userAccountRepository,
@@ -47,7 +47,6 @@ public class UserRoleServiceImpl implements UserRoleService {
         return userRoleRepository.findByUser_Id(userId);
     }
 
-    // ✅ THIS METHOD FIXES YOUR ERROR
     @Override
     public void removeRole(Long id) {
         userRoleRepository.deleteById(id);
