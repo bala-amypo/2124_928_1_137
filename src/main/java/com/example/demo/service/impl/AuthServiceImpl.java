@@ -9,6 +9,7 @@ import com.example.demo.exception.ResourceNotFoundException;
 import com.example.demo.repository.UserAccountRepository;
 import com.example.demo.security.JwtUtil;
 import com.example.demo.service.AuthService;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -21,6 +22,12 @@ public class AuthServiceImpl implements AuthService {
     private final PasswordEncoder passwordEncoder;
     private final JwtUtil jwtUtil;
 
+    // 🔹 Only for TEST compatibility (not used directly)
+    @SuppressWarnings("unused")
+    private AuthenticationManager authenticationManager;
+
+    /* ================= SPRING CONSTRUCTOR ================= */
+
     public AuthServiceImpl(UserAccountRepository userAccountRepository,
                            PasswordEncoder passwordEncoder,
                            JwtUtil jwtUtil) {
@@ -28,6 +35,21 @@ public class AuthServiceImpl implements AuthService {
         this.passwordEncoder = passwordEncoder;
         this.jwtUtil = jwtUtil;
     }
+
+    /* ================= TEST CONSTRUCTOR ================= */
+
+    // ✅ REQUIRED BY UNIT TESTS
+    public AuthServiceImpl(UserAccountRepository userAccountRepository,
+                           PasswordEncoder passwordEncoder,
+                           AuthenticationManager authenticationManager,
+                           JwtUtil jwtUtil) {
+        this.userAccountRepository = userAccountRepository;
+        this.passwordEncoder = passwordEncoder;
+        this.authenticationManager = authenticationManager;
+        this.jwtUtil = jwtUtil;
+    }
+
+    /* ================= REGISTER ================= */
 
     @Override
     public AuthResponseDto register(RegisterRequestDto request) {
@@ -44,11 +66,11 @@ public class AuthServiceImpl implements AuthService {
 
         userAccountRepository.save(user);
 
-        // ✅ IMPORTANT FIX HERE
         String token = jwtUtil.generateToken(new HashMap<>(), user.getEmail());
-
         return new AuthResponseDto(token);
     }
+
+    /* ================= LOGIN ================= */
 
     @Override
     public AuthResponseDto login(AuthRequestDto request) {
@@ -61,9 +83,7 @@ public class AuthServiceImpl implements AuthService {
             throw new BadRequestException("Invalid email or password");
         }
 
-        // ✅ IMPORTANT FIX HERE
         String token = jwtUtil.generateToken(new HashMap<>(), user.getEmail());
-
         return new AuthResponseDto(token);
     }
 }

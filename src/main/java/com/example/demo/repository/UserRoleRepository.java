@@ -8,7 +8,12 @@ import java.util.Optional;
 
 public interface UserRoleRepository extends JpaRepository<UserRole, Long> {
 
+    // Existing (good to keep)
     Optional<UserRole> findByUserIdAndRoleId(Long userId, Long roleId);
 
+    // Existing (can stay)
     List<UserRole> findByUserId(Long userId);
+
+    // ✅ REQUIRED BY TESTS
+    List<UserRole> findByUser_Id(Long userId);
 }
