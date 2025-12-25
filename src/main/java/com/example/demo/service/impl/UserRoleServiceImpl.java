@@ -54,7 +54,6 @@ public class UserRoleServiceImpl implements UserRoleService {
             throw new BadRequestException("Role is inactive");
         }
 
-        // ✅ Duplicate check
         if (userRoleRepository.findByUserIdAndRoleId(userId, roleId).isPresent()) {
             throw new BadRequestException("Role already assigned to this user");
         }
@@ -68,7 +67,6 @@ public class UserRoleServiceImpl implements UserRoleService {
 
     /* ================= GET BY ID ================= */
 
-    // ✅ REQUIRED BY TESTS
     @Override
     public UserRole getMappingById(Long id) {
         return userRoleRepository.findById(id)
@@ -80,8 +78,8 @@ public class UserRoleServiceImpl implements UserRoleService {
 
     @Override
     public List<UserRole> getRolesForUser(Long userId) {
-        // ❌ DO NOT validate user existence (TEST EXPECTATION)
-        return userRoleRepository.findByUserId(userId);
+        // ✅ IMPORTANT: correct property path
+        return userRoleRepository.findByUser_Id(userId);
     }
 
     /* ================= REMOVE ================= */
@@ -89,11 +87,10 @@ public class UserRoleServiceImpl implements UserRoleService {
     @Override
     public void removeRole(Long id) {
 
-        // ✅ Only throw if explicitly not found
-        UserRole mapping = userRoleRepository.findById(id)
-                .orElseThrow(() ->
-                        new ResourceNotFoundException("Mapping not found"));
+        if (!userRoleRepository.existsById(id)) {
+            throw new ResourceNotFoundException("Mapping not found");
+        }
 
-        userRoleRepository.delete(mapping);
+        userRoleRepository.deleteById(id);
     }
 }
