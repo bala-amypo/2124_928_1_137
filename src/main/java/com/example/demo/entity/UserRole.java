@@ -21,10 +21,12 @@ public class UserRole {
 
     /* ================= RELATIONSHIPS ================= */
 
+    // ✅ EAGER fixes ByteBuddy / Jackson serialization issues
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id", nullable = false)
     private UserAccount user;
 
+    // ✅ EAGER fixes ByteBuddy / Jackson serialization issues
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "role_id", nullable = false)
     private Role role;
@@ -41,7 +43,7 @@ public class UserRole {
 
     /* ================= JPA LIFECYCLE ================= */
 
-    // ✅ TESTS CALL THIS METHOD DIRECTLY
+    // ✅ REQUIRED BY TESTS
     @PrePersist
     public void prePersist() {
         this.assignedAt = Instant.now();
