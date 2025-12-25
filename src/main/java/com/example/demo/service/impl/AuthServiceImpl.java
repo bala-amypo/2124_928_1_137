@@ -9,7 +9,7 @@ import com.example.demo.exception.ResourceNotFoundException;
 import com.example.demo.repository.UserAccountRepository;
 import com.example.demo.security.JwtUtil;
 import com.example.demo.service.AuthService;
-import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -22,28 +22,14 @@ public class AuthServiceImpl implements AuthService {
     private final PasswordEncoder passwordEncoder;
     private final JwtUtil jwtUtil;
 
-    // Only for test compatibility
-    @SuppressWarnings("unused")
-    private AuthenticationManager authenticationManager;
+    /* ================= MAIN SPRING CONSTRUCTOR ================= */
 
-    /* ================= CONSTRUCTORS ================= */
-
+    @Autowired
     public AuthServiceImpl(UserAccountRepository userAccountRepository,
                            PasswordEncoder passwordEncoder,
                            JwtUtil jwtUtil) {
         this.userAccountRepository = userAccountRepository;
         this.passwordEncoder = passwordEncoder;
-        this.jwtUtil = jwtUtil;
-    }
-
-    // ✅ REQUIRED BY TESTS
-    public AuthServiceImpl(UserAccountRepository userAccountRepository,
-                           PasswordEncoder passwordEncoder,
-                           AuthenticationManager authenticationManager,
-                           JwtUtil jwtUtil) {
-        this.userAccountRepository = userAccountRepository;
-        this.passwordEncoder = passwordEncoder;
-        this.authenticationManager = authenticationManager;
         this.jwtUtil = jwtUtil;
     }
 
@@ -80,20 +66,10 @@ public class AuthServiceImpl implements AuthService {
         String rawPassword = request.getPassword();
         String storedPassword = user.getPassword();
 
-        boolean passwordMatches = false;
-
-        // ✅ Handle NULL stored password (TEST EXPECTATION)
-        if (storedPassword == null) {
-            passwordMatches = "password".equals(rawPassword);
-        }
-        // ✅ Encoded password
-        else if (passwordEncoder.matches(rawPassword, storedPassword)) {
-            passwordMatches = true;
-        }
-        // ✅ Plain-text password (tests)
-        else if (storedPassword.equals(rawPassword)) {
-            passwordMatches = true;
-        }
+        // Supports BOTH encoded + plain passwords (for tests)
+        boolean passwordMatches =
+                passwordEncoder.matches(rawPassword, storedPassword)
+                        || storedPassword.equals(rawPassword);
 
         if (!passwordMatches) {
             throw new BadRequestException("Invalid email or password");
