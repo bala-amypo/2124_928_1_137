@@ -28,9 +28,6 @@ public class RolePermissionServiceImpl implements RolePermissionService {
         this.permissionRepository = permissionRepository;
     }
 
-    /**
-     * Assign permission to role
-     */
     @Override
     public RolePermission create(RolePermission rolePermission) {
 
@@ -45,7 +42,6 @@ public class RolePermissionServiceImpl implements RolePermissionService {
                 .orElseThrow(() ->
                         new ResourceNotFoundException("Permission not found"));
 
-        // Prevent duplicate mapping
         boolean exists = rolePermissionRepository
                 .findByRole_Id(roleId)
                 .stream()
@@ -63,7 +59,7 @@ public class RolePermissionServiceImpl implements RolePermissionService {
 
         RolePermission saved = rolePermissionRepository.save(rp);
 
-        // 🔥 IMPORTANT FIX: fetch again to avoid null values
+        // 🔥 IMPORTANT: fetch again to avoid null values
         return rolePermissionRepository.findById(saved.getId())
                 .orElseThrow(() ->
                         new ResourceNotFoundException(
@@ -84,7 +80,7 @@ public class RolePermissionServiceImpl implements RolePermissionService {
     }
 
     @Override
-    public void delete(Long id) {
+    public void revokePermission(Long id) {
         RolePermission rp = getById(id);
         rolePermissionRepository.delete(rp);
     }
