@@ -4,6 +4,7 @@ import com.example.demo.security.JwtAuthenticationFilter;
 import com.example.demo.security.JwtUtil;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -33,30 +34,42 @@ public class SecurityConfig {
             JwtUtil jwtUtil) throws Exception {
 
         http
-            // Disable CSRF for REST API
+            // REQUIRED for Swagger + proxy
+            .cors(cors -> {})
+
+            // Disable CSRF for REST APIs
             .csrf(csrf -> csrf.disable())
 
-            // Stateless session (JWT)
+            // JWT → Stateless
             .sessionManagement(session ->
                 session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
             )
 
-            // Authorization rules
             .authorizeHttpRequests(auth -> auth
-                // PUBLIC ENDPOINTS
+
+                // VERY IMPORTANT: allow OPTIONS (preflight)
+                .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
+
+                // AUTH endpoints
                 .requestMatchers(
-                    "/auth/**",
-                    "/swagger-ui/**",
-                    "/v3/api-docs/**",
-                    "/swagger-ui.html",
-                    "/simple-status"
+                        HttpMethod.POST,
+                        "/auth/register",
+                        "/auth/login"
                 ).permitAll()
 
-                // PROTECTED ENDPOINTS
+                // Swagger
+                .requestMatchers(
+                        "/swagger-ui/**",
+                        "/swagger-ui.html",
+                        "/v3/api-docs/**",
+                        "/simple-status"
+                ).permitAll()
+
+                // API secured
                 .requestMatchers("/api/**").authenticated()
 
-                // Any other request
-                .anyRequest().denyAll()
+                // Everything else allowed (IMPORTANT)
+                .anyRequest().permitAll()
             )
 
             // JWT filter
