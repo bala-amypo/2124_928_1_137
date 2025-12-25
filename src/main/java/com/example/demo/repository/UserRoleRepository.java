@@ -4,8 +4,11 @@ import com.example.demo.entity.UserRole;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface UserRoleRepository extends JpaRepository<UserRole, Long> {
 
-    List<UserRole> findByUser_Id(Long userId);
+    Optional<UserRole> findByUserIdAndRoleId(Long userId, Long roleId);
+
+    List<UserRole> findByUserId(Long userId);
 }

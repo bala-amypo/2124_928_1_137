@@ -1,52 +1,43 @@
 package com.example.demo.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
-@Table(
-    name = "roles",
-    uniqueConstraints = @UniqueConstraint(columnNames = "role_name")
-)
-@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+@Table(name = "roles")
 public class Role {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "role_name", nullable = false, unique = true)
     private String roleName;
 
     private String description;
 
     private boolean active = true;
 
-    @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;
-
-    @Column(name = "updated_at")
     private LocalDateTime updatedAt;
 
-    public Role() {
-    }
-
-    /* ===== AUTO TIMESTAMPS ===== */
+    @OneToMany(mappedBy = "role", fetch = FetchType.LAZY)
+    @JsonIgnore   // 🔴 FIX recursion
+    private List<UserRole> userRoles;
 
     @PrePersist
-    public void onCreate() {
-        this.createdAt = LocalDateTime.now();
-        this.updatedAt = LocalDateTime.now();
+    protected void onCreate() {
+        createdAt = LocalDateTime.now();
+        updatedAt = LocalDateTime.now();
     }
 
     @PreUpdate
-    public void onUpdate() {
-        this.updatedAt = LocalDateTime.now();
+    protected void onUpdate() {
+        updatedAt = LocalDateTime.now();
     }
 
-    /* ===== GETTERS & SETTERS ===== */
+    /* Getters & Setters */
 
     public Long getId() {
         return id;
@@ -56,31 +47,27 @@ public class Role {
         return roleName;
     }
 
-    public String getDescription() {
-        return description;
-    }
-
-    public boolean isActive() {
-        return active;
-    }
-
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    public LocalDateTime getUpdatedAt() {
-        return updatedAt;
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public void setRoleName(String roleName) {
         this.roleName = roleName;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
+    public boolean isActive() {
+        return active;
+    }
+
+    public String getDescription() {
+        return description;
     }
 
     public void setActive(boolean active) {
         this.active = active;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 }

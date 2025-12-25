@@ -1,6 +1,7 @@
 package com.example.demo.service;
 
 import com.example.demo.entity.UserRole;
+
 import java.util.List;
 
 public interface UserRoleService {
@@ -9,7 +10,7 @@ public interface UserRoleService {
 
     UserRole getById(Long id);
 
-    List<UserRole> getByUserId(Long userId);
+    List<UserRole> getRolesForUser(Long userId);
 
-    void revokeRole(Long id);
+    void removeRole(Long id);
 }
