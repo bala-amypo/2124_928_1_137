@@ -38,28 +38,32 @@ public class UserRoleServiceImpl implements UserRoleService {
         Long userId = userRole.getUser().getId();
         Long roleId = userRole.getRole().getId();
 
-        // ✅ Duplicate check (required by tests)
-        if (userRoleRepository.findByUserIdAndRoleId(userId, roleId).isPresent()) {
-            throw new BadRequestException("Role already assigned to this user");
-        }
-
         UserAccount user = userRepository.findById(userId)
                 .orElseThrow(() ->
                         new ResourceNotFoundException("User not found"));
+
+        if (!user.isActive()) {
+            throw new BadRequestException("User is inactive");
+        }
 
         Role role = roleRepository.findById(roleId)
                 .orElseThrow(() ->
                         new ResourceNotFoundException("Role not found"));
 
-        userRole.setUser(user);
-        userRole.setRole(role);
+        if (!role.isActive()) {
+            throw new BadRequestException("Role is inactive");
+        }
 
-        UserRole saved = userRoleRepository.save(userRole);
+        // ✅ Duplicate check AFTER validation
+        if (userRoleRepository.findByUserIdAndRoleId(userId, roleId).isPresent()) {
+            throw new BadRequestException("Role already assigned to this user");
+        }
 
-        // 🔥 Re-fetch to avoid lazy/null issues in response
-        return userRoleRepository.findById(saved.getId())
-                .orElseThrow(() ->
-                        new ResourceNotFoundException("Mapping not found"));
+        UserRole mapping = new UserRole();
+        mapping.setUser(user);
+        mapping.setRole(role);
+
+        return userRoleRepository.save(mapping);
     }
 
     /* ================= GET BY ID ================= */
@@ -76,6 +80,11 @@ public class UserRoleServiceImpl implements UserRoleService {
 
     @Override
     public List<UserRole> getRolesForUser(Long userId) {
+
+        if (!userRepository.existsById(userId)) {
+            throw new ResourceNotFoundException("User not found");
+        }
+
         return userRoleRepository.findByUserId(userId);
     }
 
@@ -83,7 +92,8 @@ public class UserRoleServiceImpl implements UserRoleService {
 
     @Override
     public void removeRole(Long id) {
-        UserRole userRole = getMappingById(id);
-        userRoleRepository.delete(userRole);
+
+        UserRole mapping = getMappingById(id);
+        userRoleRepository.delete(mapping);
     }
 }

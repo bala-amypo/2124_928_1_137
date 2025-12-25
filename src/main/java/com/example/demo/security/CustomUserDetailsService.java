@@ -29,9 +29,20 @@ public class CustomUserDetailsService implements UserDetailsService {
                 .orElseThrow(() ->
                         new UsernameNotFoundException("User not found"));
 
+        // ✅ REQUIRED BY TESTS
+        if (!user.isActive()) {
+            throw new UsernameNotFoundException("User is inactive");
+        }
+
+        // ✅ NEVER allow null password
+        String password = user.getPassword();
+        if (password == null) {
+            password = "";
+        }
+
         return User.builder()
                 .username(user.getEmail())
-                .password(user.getPassword())
+                .password(password)
                 .authorities("USER")
                 .build();
     }
