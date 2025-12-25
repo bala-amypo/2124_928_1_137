@@ -1,33 +1,31 @@
 package com.example.demo.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
-import java.time.Instant;
 
 @Entity
-@Table(name = "user_roles")
+@Table(
+    name = "user_roles",
+    uniqueConstraints = @UniqueConstraint(
+        columnNames = {"user_id", "role_id"}
+    )
+)
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class UserRole {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(optional = false)
-    @JoinColumn(name = "user_id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false)
     private UserAccount user;
 
-    @ManyToOne(optional = false)
-    @JoinColumn(name = "role_id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "role_id", nullable = false)
     private Role role;
 
-    private Instant assignedAt;
-
-    public UserRole() {
-    }
-
-    @PrePersist
-    public void onAssign() {
-        assignedAt = Instant.now();
-    }
+    public UserRole() {}
 
     public Long getId() {
         return id;
@@ -37,12 +35,12 @@ public class UserRole {
         return user;
     }
 
-    public void setUser(UserAccount user) {
-        this.user = user;
-    }
-
     public Role getRole() {
         return role;
+    }
+
+    public void setUser(UserAccount user) {
+        this.user = user;
     }
 
     public void setRole(Role role) {

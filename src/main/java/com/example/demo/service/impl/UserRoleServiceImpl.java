@@ -1,41 +1,25 @@
-package com.example.demo.service.impl;
+@Override
+public UserRole assignRole(UserRole userRole) {
 
-import com.example.demo.entity.UserRole;
-import com.example.demo.exception.ResourceNotFoundException;
-import com.example.demo.repository.UserRoleRepository;
-import com.example.demo.service.UserRoleService;
-import org.springframework.stereotype.Service;
+    Long userId = userRole.getUser().getId();
+    Long roleId = userRole.getRole().getId();
 
-import java.util.List;
+    UserAccount user = userRepository.findById(userId)
+            .orElseThrow(() ->
+                new ResourceNotFoundException("User not found"));
 
-@Service
-public class UserRoleServiceImpl implements UserRoleService {
+    Role role = roleRepository.findById(roleId)
+            .orElseThrow(() ->
+                new ResourceNotFoundException("Role not found"));
 
-    private final UserRoleRepository repository;
+    UserRole ur = new UserRole();
+    ur.setUser(user);
+    ur.setRole(role);
 
-    public UserRoleServiceImpl(UserRoleRepository repository) {
-        this.repository = repository;
-    }
+    UserRole saved = userRoleRepository.save(ur);
 
-    @Override
-    public UserRole assignRole(UserRole mapping) {
-        return repository.save(mapping);
-    }
-
-    @Override
-    public List<UserRole> getRolesForUser(Long userId) {
-        return repository.findByUser_Id(userId);
-    }
-
-    @Override
-    public UserRole getMappingById(Long id) {
-
-        return repository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Mapping not found"));
-    }
-
-    @Override
-    public void removeRole(Long mappingId) {
-        repository.deleteById(mappingId);
-    }
+    // 🔥 IMPORTANT FIX (same as RolePermission)
+    return userRoleRepository.findById(saved.getId())
+            .orElseThrow(() ->
+                new ResourceNotFoundException("Mapping not found"));
 }
