@@ -25,38 +25,50 @@ public class UserRoleServiceImpl implements UserRoleService {
     @Autowired
     private RoleRepository roleRepository;
 
-    // ✅ ASSIGN ROLE
+    /**
+     * Assign a role to a user
+     */
     @Override
     public UserRole assignRole(UserRole userRole) {
 
+        // Fetch full User entity
         UserAccount user = userAccountRepository
                 .findById(userRole.getUser().getId())
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
+        // Fetch full Role entity
         Role role = roleRepository
                 .findById(userRole.getRole().getId())
                 .orElseThrow(() -> new RuntimeException("Role not found"));
 
+        // Attach entities
         userRole.setUser(user);
         userRole.setRole(role);
 
+        // Save mapping
         return userRoleRepository.save(userRole);
     }
 
-    // ✅ GET USER-ROLE BY ID
+    /**
+     * Get UserRole mapping by ID
+     */
     @Override
     public UserRole getMappingById(Long id) {
         return userRoleRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("UserRole not found"));
     }
 
-    // ✅ GET ROLES FOR USER
+    /**
+     * Get all roles for a specific user
+     */
     @Override
     public List<UserRole> getRolesForUser(Long userId) {
-        return userRoleRepository.findByUserId(userId);
+        return userRoleRepository.findByUser_Id(userId);
     }
 
-    // ✅ DELETE ROLE MAPPING
+    /**
+     * Remove role mapping
+     */
     @Override
     public void removeRole(Long id) {
         userRoleRepository.deleteById(id);
