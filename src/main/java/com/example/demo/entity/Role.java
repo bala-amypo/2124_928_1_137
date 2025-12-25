@@ -1,53 +1,52 @@
 package com.example.demo.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
-import java.time.Instant;
+
+import java.time.LocalDateTime;
 
 @Entity
 @Table(
     name = "roles",
-    uniqueConstraints = @UniqueConstraint(columnNames = "roleName")
+    uniqueConstraints = @UniqueConstraint(columnNames = "role_name")
 )
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Role {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
+    @Column(name = "role_name", nullable = false, unique = true)
     private String roleName;
 
     private String description;
 
-    private Boolean active = true;
+    private boolean active = true;
 
-    @Column(name = "created_at", nullable = false, updatable = false)
-    private Instant createdAt;
+    @Column(name = "created_at", updatable = false)
+    private LocalDateTime createdAt;
 
     @Column(name = "updated_at")
-    private Instant updatedAt;
+    private LocalDateTime updatedAt;
 
     public Role() {
     }
 
-    /* ======================
-       JPA LIFECYCLE METHODS
-       ====================== */
+    /* ===== AUTO TIMESTAMPS ===== */
 
     @PrePersist
     public void onCreate() {
-        this.createdAt = Instant.now();
-        this.updatedAt = Instant.now();
+        this.createdAt = LocalDateTime.now();
+        this.updatedAt = LocalDateTime.now();
     }
 
     @PreUpdate
     public void onUpdate() {
-        this.updatedAt = Instant.now();
+        this.updatedAt = LocalDateTime.now();
     }
 
-    /* ======================
-       GETTERS & SETTERS
-       ====================== */
+    /* ===== GETTERS & SETTERS ===== */
 
     public Long getId() {
         return id;
@@ -57,31 +56,31 @@ public class Role {
         return roleName;
     }
 
-    public void setRoleName(String roleName) {
-        this.roleName = roleName;
-    }
-
     public String getDescription() {
         return description;
+    }
+
+    public boolean isActive() {
+        return active;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public LocalDateTime getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setRoleName(String roleName) {
+        this.roleName = roleName;
     }
 
     public void setDescription(String description) {
         this.description = description;
     }
 
-    public Boolean getActive() {
-        return active;
-    }
-
-    public void setActive(Boolean active) {
+    public void setActive(boolean active) {
         this.active = active;
-    }
-
-    public Instant getCreatedAt() {
-        return createdAt;
-    }
-
-    public Instant getUpdatedAt() {
-        return updatedAt;
     }
 }

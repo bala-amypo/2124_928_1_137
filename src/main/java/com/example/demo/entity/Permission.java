@@ -1,26 +1,31 @@
 package com.example.demo.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 
 @Entity
 @Table(
     name = "permissions",
-    uniqueConstraints = @UniqueConstraint(columnNames = "permissionKey")
+    uniqueConstraints = @UniqueConstraint(columnNames = "permission_key")
 )
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Permission {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(name = "permission_key", nullable = false, unique = true)
     private String permissionKey;
 
     private String description;
 
-    private Boolean active = true;
+    private boolean active = true;
 
     public Permission() {
     }
+
+    /* ===== GETTERS & SETTERS ===== */
 
     public Long getId() {
         return id;
@@ -30,23 +35,23 @@ public class Permission {
         return permissionKey;
     }
 
-    public void setPermissionKey(String permissionKey) {
-        this.permissionKey = permissionKey;
-    }
-
     public String getDescription() {
         return description;
+    }
+
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setPermissionKey(String permissionKey) {
+        this.permissionKey = permissionKey;
     }
 
     public void setDescription(String description) {
         this.description = description;
     }
 
-    public Boolean getActive() {
-        return active;
-    }
-
-    public void setActive(Boolean active) {
+    public void setActive(boolean active) {
         this.active = active;
     }
 }

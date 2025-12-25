@@ -25,7 +25,10 @@ public class RolePermission {
     @JoinColumn(name = "permission_id", nullable = false)
     private Permission permission;
 
-    public RolePermission() {}
+    public RolePermission() {
+    }
+
+    /* ===== GETTERS & SETTERS ===== */
 
     public Long getId() {
         return id;
