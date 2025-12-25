@@ -6,11 +6,19 @@ import java.util.List;
 
 public interface UserRoleService {
 
+    /* ================= ASSIGN ================= */
+
     UserRole assignRole(UserRole userRole);
 
-    UserRole getById(Long id);
+    /* ================= FETCH ================= */
 
+    // ✅ REQUIRED BY TESTS
+    UserRole getMappingById(Long id);
+
+    // ✅ REQUIRED BY TESTS
     List<UserRole> getRolesForUser(Long userId);
+
+    /* ================= DELETE ================= */
 
     void removeRole(Long id);
 }

@@ -28,6 +28,8 @@ public class RolePermissionServiceImpl implements RolePermissionService {
         this.permissionRepository = permissionRepository;
     }
 
+    /* ================= CREATE ================= */
+
     @Override
     public RolePermission create(RolePermission rolePermission) {
 
@@ -59,29 +61,34 @@ public class RolePermissionServiceImpl implements RolePermissionService {
 
         RolePermission saved = rolePermissionRepository.save(rp);
 
-        // 🔥 IMPORTANT: fetch again to avoid null values
-        return rolePermissionRepository.findById(saved.getId())
-                .orElseThrow(() ->
-                        new ResourceNotFoundException(
-                                "RolePermission not found"));
+        // Re-fetch to avoid lazy/null issues
+        return getMappingById(saved.getId());
     }
 
+    /* ================= GET BY ID ================= */
+
+    // ✅ REQUIRED BY TESTS
     @Override
-    public RolePermission getById(Long id) {
+    public RolePermission getMappingById(Long id) {
         return rolePermissionRepository.findById(id)
                 .orElseThrow(() ->
                         new ResourceNotFoundException(
                                 "RolePermission not found"));
     }
 
+    /* ================= GET BY ROLE ================= */
+
+    // ✅ REQUIRED BY TESTS
     @Override
-    public List<RolePermission> getByRoleId(Long roleId) {
+    public List<RolePermission> getPermissionsForRole(Long roleId) {
         return rolePermissionRepository.findByRole_Id(roleId);
     }
 
+    /* ================= DELETE ================= */
+
     @Override
     public void revokePermission(Long id) {
-        RolePermission rp = getById(id);
+        RolePermission rp = getMappingById(id);
         rolePermissionRepository.delete(rp);
     }
 }
