@@ -12,5 +12,5 @@ public interface RolePermissionService {
 
     List<RolePermission> getByRoleId(Long roleId);
 
-    void revokePermission(Long id);   // 🔥 THIS WAS MISSING IN IMPL
+    void revokePermission(Long id);
 }
