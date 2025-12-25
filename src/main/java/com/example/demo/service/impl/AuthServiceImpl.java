@@ -12,6 +12,8 @@ import com.example.demo.service.AuthService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
+
 @Service
 public class AuthServiceImpl implements AuthService {
 
@@ -19,7 +21,6 @@ public class AuthServiceImpl implements AuthService {
     private final PasswordEncoder passwordEncoder;
     private final JwtUtil jwtUtil;
 
-    // CONSTRUCTOR INJECTION (as per rules)
     public AuthServiceImpl(UserAccountRepository userAccountRepository,
                            PasswordEncoder passwordEncoder,
                            JwtUtil jwtUtil) {
@@ -28,54 +29,40 @@ public class AuthServiceImpl implements AuthService {
         this.jwtUtil = jwtUtil;
     }
 
-    /**
-     * Register user and generate JWT token
-     */
     @Override
     public AuthResponseDto register(RegisterRequestDto request) {
 
-        // Check duplicate email
         if (userAccountRepository.existsByEmail(request.getEmail())) {
             throw new BadRequestException("Email already exists");
         }
 
-        // Create user
         UserAccount user = new UserAccount();
         user.setEmail(request.getEmail());
         user.setFullName(request.getFullName());
         user.setPassword(passwordEncoder.encode(request.getPassword()));
         user.setActive(true);
 
-        // Save user
         userAccountRepository.save(user);
 
-        // Generate JWT
-        String token = jwtUtil.generateToken(null, user.getEmail());
+        // ✅ IMPORTANT FIX HERE
+        String token = jwtUtil.generateToken(new HashMap<>(), user.getEmail());
 
-        // Return token
         return new AuthResponseDto(token);
     }
 
-    /**
-     * Login user and generate JWT token
-     */
     @Override
     public AuthResponseDto login(AuthRequestDto request) {
 
-        // Fetch user
-        UserAccount user = userAccountRepository
-                .findByEmail(request.getEmail())
+        UserAccount user = userAccountRepository.findByEmail(request.getEmail())
                 .orElseThrow(() ->
                         new ResourceNotFoundException("Invalid email or password"));
 
-        // Validate password
-        if (!passwordEncoder.matches(
-                request.getPassword(), user.getPassword())) {
+        if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
             throw new BadRequestException("Invalid email or password");
         }
 
-        // Generate JWT
-        String token = jwtUtil.generateToken(null, user.getEmail());
+        // ✅ IMPORTANT FIX HERE
+        String token = jwtUtil.generateToken(new HashMap<>(), user.getEmail());
 
         return new AuthResponseDto(token);
     }
