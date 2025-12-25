@@ -1,33 +1,32 @@
 package com.example.demo.entity;
 
 import jakarta.persistence.*;
-import java.time.Instant;
 
 @Entity
-@Table(name = "role_permissions")
+@Table(
+    name = "role_permissions",
+    uniqueConstraints = @UniqueConstraint(
+        columnNames = {"role_id", "permission_id"}
+    )
+)
 public class RolePermission {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(optional = false)
-    @JoinColumn(name = "role_id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "role_id", nullable = false)
     private Role role;
 
-    @ManyToOne(optional = false)
-    @JoinColumn(name = "permission_id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "permission_id", nullable = false)
     private Permission permission;
-
-    private Instant grantedAt;
 
     public RolePermission() {
     }
 
-    @PrePersist
-    public void onGrant() {
-        grantedAt = Instant.now();
-    }
+    /* ========= GETTERS & SETTERS ========= */
 
     public Long getId() {
         return id;
