@@ -21,10 +21,9 @@ public class RoleServiceImpl implements RoleService {
     @Override
     public Role createRole(Role role) {
 
-        repository.findByRoleName(role.getRoleName())
-                .ifPresent(r -> {
-                    throw new BadRequestException("Role already exists");
-                });
+        if (repository.findByRoleName(role.getRoleName()).isPresent()) {
+            throw new BadRequestException("Role already exists");
+        }
 
         return repository.save(role);
     }
@@ -33,7 +32,8 @@ public class RoleServiceImpl implements RoleService {
     public Role updateRole(Long id, Role role) {
 
         Role existing = repository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Role not found"));
+                .orElseThrow(() ->
+                        new ResourceNotFoundException("Role not found"));
 
         existing.setDescription(role.getDescription());
         return repository.save(existing);
@@ -43,7 +43,8 @@ public class RoleServiceImpl implements RoleService {
     public Role getRoleById(Long id) {
 
         return repository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Role not found"));
+                .orElseThrow(() ->
+                        new ResourceNotFoundException("Role not found"));
     }
 
     @Override
