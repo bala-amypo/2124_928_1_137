@@ -1,30 +1,60 @@
 package com.example.demo.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import java.time.LocalDateTime;
+import java.util.Set;
+
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "users")
-@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+@Table(name = "user_accounts")
 public class UserAccount {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable = false, unique = true, length = 150)
     private String email;
 
+    @Column(name = "full_name", nullable = false, length = 150)
     private String fullName;
 
-    @JsonIgnore // 🔐 hide password in API responses
+    @Column(nullable = false)
     private String password;
 
+    @Column(nullable = false)
     private boolean active = true;
 
-    public UserAccount() {}
+    @CreationTimestamp
+    @Column(name = "created_at", updatable = false)
+    private LocalDateTime createdAt;
 
-    // ---------- GETTERS ----------
+    @UpdateTimestamp
+    @Column(name = "updated_at")
+    private LocalDateTime updatedAt;
+
+    /* ================= RELATIONS ================= */
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<UserRole> userRoles;
+
+    /* ================= CONSTRUCTORS ================= */
+
+    public UserAccount() {
+    }
+
+    public UserAccount(String email, String fullName, String password) {
+        this.email = email;
+        this.fullName = fullName;
+        this.password = password;
+        this.active = true;
+    }
+
+    /* ================= GETTERS ================= */
+
     public Long getId() {
         return id;
     }
@@ -45,7 +75,24 @@ public class UserAccount {
         return active;
     }
 
-    // ---------- SETTERS (REQUIRED FOR SERVICES) ----------
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public LocalDateTime getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public Set<UserRole> getUserRoles() {
+        return userRoles;
+    }
+
+    /* ================= SETTERS ================= */
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
     public void setEmail(String email) {
         this.email = email;
     }
@@ -60,5 +107,9 @@ public class UserAccount {
 
     public void setActive(boolean active) {
         this.active = active;
+    }
+
+    public void setUserRoles(Set<UserRole> userRoles) {
+        this.userRoles = userRoles;
     }
 }
