@@ -1,10 +1,10 @@
 package com.example.demo.service.impl;
 
 import com.example.demo.entity.UserAccount;
+import com.example.demo.exception.BadRequestException;
+import com.example.demo.exception.ResourceNotFoundException;
 import com.example.demo.repository.UserAccountRepository;
 import com.example.demo.service.UserAccountService;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -13,22 +13,35 @@ import java.util.List;
 public class UserAccountServiceImpl implements UserAccountService {
 
     private final UserAccountRepository repository;
-    private final PasswordEncoder passwordEncoder;
 
     public UserAccountServiceImpl(UserAccountRepository repository) {
         this.repository = repository;
-        this.passwordEncoder = new BCryptPasswordEncoder();
     }
 
     @Override
     public UserAccount createUser(UserAccount user) {
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
+
+        if (repository.existsByEmail(user.getEmail())) {
+            throw new BadRequestException("Email already exists");
+        }
         return repository.save(user);
     }
 
     @Override
+    public UserAccount updateUser(Long id, UserAccount user) {
+
+        UserAccount existing = repository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+
+        existing.setFullName(user.getFullName());
+        return repository.save(existing);
+    }
+
+    @Override
     public UserAccount getUserById(Long id) {
-        return repository.findById(id).orElse(null);
+
+        return repository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
     }
 
     @Override
@@ -37,19 +50,10 @@ public class UserAccountServiceImpl implements UserAccountService {
     }
 
     @Override
-    public UserAccount updateUser(Long id, UserAccount updated) { // ✅ FIX
-        return repository.findById(id).map(existing -> {
-            existing.setEmail(updated.getEmail());
-            existing.setFullName(updated.getFullName());
-            return repository.save(existing);
-        }).orElse(null);
-    }
-
-    @Override
     public void deactivateUser(Long id) {
-        repository.findById(id).ifPresent(user -> {
-            user.setActive(false);
-            repository.save(user);
-        });
+
+        UserAccount user = getUserById(id);
+        user.setActive(false);
+        repository.save(user);
     }
 }
