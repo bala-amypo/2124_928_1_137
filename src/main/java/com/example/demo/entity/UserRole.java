@@ -1,41 +1,16 @@
-package com.example.demo.entity;
+package com.example.demo.service;
 
-import jakarta.persistence.*;
+import java.util.List;
+import com.example.demo.entity.UserRole;
 
-@Entity
-@Table(name = "user_roles")
-public class UserRole {
+public interface UserRoleService {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    UserRole assignRole(UserRole userRole);
 
-    @ManyToOne
-    @JoinColumn(name = "user_id")
-    private UserAccount user;
+    UserRole getMappingById(Long id);
 
-    @ManyToOne
-    @JoinColumn(name = "role_id")
-    private Role role;
+    List<UserRole> getRolesForUser(Long userId);
 
-    // getters & setters
-    public Long getId() {
-        return id;
-    }
-
-    public UserAccount getUser() {
-        return user;
-    }
-
-    public void setUser(UserAccount user) {
-        this.user = user;
-    }
-
-    public Role getRole() {
-        return role;
-    }
-
-    public void setRole(Role role) {
-        this.role = role;
-    }
+    // ❗ THIS METHOD IS CAUSING THE ERROR
+    void removeRole(Long id);
 }
