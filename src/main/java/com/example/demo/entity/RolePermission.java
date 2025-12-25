@@ -3,7 +3,7 @@ package com.example.demo.entity;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 
 @Entity
 @Table(
@@ -34,9 +34,9 @@ public class RolePermission {
     /* ================= AUDIT FIELD ================= */
 
     @Column(name = "granted_at", nullable = false, updatable = false)
-    private LocalDateTime grantedAt;
+    private Instant grantedAt;
 
-    /* ================= CONSTRUCTORS ================= */
+    /* ================= CONSTRUCTOR ================= */
 
     public RolePermission() {
     }
@@ -46,7 +46,7 @@ public class RolePermission {
     // ✅ REQUIRED BY TESTS
     @PrePersist
     public void prePersist() {
-        this.grantedAt = LocalDateTime.now();
+        this.grantedAt = Instant.now();
     }
 
     /* ================= GETTERS & SETTERS ================= */
@@ -68,7 +68,8 @@ public class RolePermission {
         return permission;
     }
 
-    public LocalDateTime getGrantedAt() {
+    // ✅ REQUIRED BY TESTS
+    public Instant getGrantedAt() {
         return grantedAt;
     }
 

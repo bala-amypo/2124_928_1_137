@@ -3,7 +3,7 @@ package com.example.demo.entity;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 
-import java.time.LocalDateTime;
+import java.time.Instant;
 
 @Entity
 @Table(
@@ -32,9 +32,9 @@ public class UserRole {
     /* ================= AUDIT FIELD ================= */
 
     @Column(name = "assigned_at", nullable = false, updatable = false)
-    private LocalDateTime assignedAt;
+    private Instant assignedAt;
 
-    /* ================= CONSTRUCTORS ================= */
+    /* ================= CONSTRUCTOR ================= */
 
     public UserRole() {
     }
@@ -44,7 +44,7 @@ public class UserRole {
     // ✅ TESTS CALL THIS METHOD DIRECTLY
     @PrePersist
     public void prePersist() {
-        this.assignedAt = LocalDateTime.now();
+        this.assignedAt = Instant.now();
     }
 
     /* ================= GETTERS & SETTERS ================= */
@@ -66,7 +66,8 @@ public class UserRole {
         return role;
     }
 
-    public LocalDateTime getAssignedAt() {
+    // ✅ REQUIRED BY TESTS
+    public Instant getAssignedAt() {
         return assignedAt;
     }
 
