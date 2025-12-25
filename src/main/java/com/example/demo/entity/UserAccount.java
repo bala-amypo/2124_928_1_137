@@ -17,18 +17,23 @@ public class UserAccount {
 
     private String fullName;
 
+    @JsonIgnore // 🔐 never expose password in JSON
     private String password;
 
     private boolean active = true;
 
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
-    @JsonIgnore   // 🔴 FIX infinite loop
+    @JsonIgnore
     private List<UserRole> userRoles;
 
-    /* Getters & Setters */
+    /* ================= GETTERS & SETTERS ================= */
 
     public Long getId() {
         return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getEmail() {
@@ -47,8 +52,9 @@ public class UserAccount {
         this.fullName = fullName;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    // ✅ THIS WAS MISSING (CAUSE OF ERROR)
+    public String getPassword() {
+        return password;
     }
 
     public void setPassword(String password) {
