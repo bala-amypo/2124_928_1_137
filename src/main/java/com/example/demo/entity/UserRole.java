@@ -1,16 +1,61 @@
-package com.example.demo.service;
+package com.example.demo.entity;
 
-import java.util.List;
-import com.example.demo.entity.UserRole;
+import java.time.Instant;
 
-public interface UserRoleService {
+import jakarta.persistence.*;
 
-    UserRole assignRole(UserRole userRole);
+@Entity
+@Table(name = "user_roles")
+public class UserRole {
 
-    UserRole getMappingById(Long id);
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-    List<UserRole> getRolesForUser(Long userId);
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private UserAccount user;
 
-    // ❗ THIS METHOD IS CAUSING THE ERROR
-    void removeRole(Long id);
+    @ManyToOne
+    @JoinColumn(name = "role_id")
+    private Role role;
+
+    @Column(name = "assigned_at")
+    private Instant assignedAt;
+
+    // ✅ REQUIRED BY TEST
+    @PrePersist
+    public void prePersist() {
+        this.assignedAt = Instant.now();
+    }
+
+    // ===== GETTERS & SETTERS =====
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {   // ✅ REQUIRED BY TEST
+        this.id = id;
+    }
+
+    public UserAccount getUser() {
+        return user;
+    }
+
+    public void setUser(UserAccount user) {
+        this.user = user;
+    }
+
+    public Role getRole() {
+        return role;
+    }
+
+    public void setRole(Role role) {
+        this.role = role;
+    }
+
+    public Instant getAssignedAt() {   // ✅ REQUIRED BY TEST
+        return assignedAt;
+    }
 }

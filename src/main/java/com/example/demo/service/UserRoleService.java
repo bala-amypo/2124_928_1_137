@@ -11,6 +11,5 @@ public interface UserRoleService {
 
     List<UserRole> getRolesForUser(Long userId);
 
-    // ❗ THIS METHOD IS CAUSING THE ERROR
     void removeRole(Long id);
 }
