@@ -11,7 +11,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-import com.example.demo.security.*;
+import com.example.demo.security.CustomUserDetailsService;
+import com.example.demo.security.JwtAuthenticationEntryPoint;
+import com.example.demo.security.JwtAuthenticationFilter;
+import com.example.demo.security.JwtUtil;
 
 @Configuration
 public class SecurityConfig {
@@ -25,13 +28,13 @@ public class SecurityConfig {
         this.userDetailsService = userDetailsService;
     }
 
-    // ✅ REGISTER JwtUtil
+    // ✅ JWT Utility
     @Bean
     public JwtUtil jwtUtil() {
         return new JwtUtil();
     }
 
-    // ✅ REGISTER JwtAuthenticationFilter
+    // ✅ JWT Filter
     @Bean
     public JwtAuthenticationFilter jwtAuthenticationFilter() {
         return new JwtAuthenticationFilter(jwtUtil(), userDetailsService);
@@ -40,32 +43,56 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
-        http.csrf(csrf -> csrf.disable())
-            .exceptionHandling(e -> e.authenticationEntryPoint(entryPoint))
-            .sessionManagement(s -> s.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+        http
+            // ❌ Disable CSRF (JWT)
+            .csrf(csrf -> csrf.disable())
+
+            // ❌ No sessions
+            .sessionManagement(session ->
+                session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+            )
+
+            // ❌ Custom unauthorized handler
+            .exceptionHandling(ex ->
+                ex.authenticationEntryPoint(entryPoint)
+            )
+
+            // ✅ Authorization rules
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers(
-                        "/auth/**",
-                        "/swagger-ui/**",
-                        "/v3/api-docs/**",
-                        "/simple-status"
+                    "/auth/**",
+                    "/swagger-ui/**",
+                    "/swagger-ui.html",
+                    "/v3/api-docs/**",
+                    "/simple-status"
                 ).permitAll()
-                .requestMatchers("/api/**").authenticated()
-            );
 
+                // 🔥 PROTECT EVERYTHING UNDER /api
+                .requestMatchers("/api/**").authenticated()
+
+                // 🔥 SAFETY NET
+                .anyRequest().authenticated()
+            )
+
+            // ✅ Register UserDetailsService
+            .userDetailsService(userDetailsService);
+
+        // ✅ JWT filter BEFORE username/password filter
         http.addFilterBefore(
-                jwtAuthenticationFilter(),
-                UsernamePasswordAuthenticationFilter.class
+            jwtAuthenticationFilter(),
+            UsernamePasswordAuthenticationFilter.class
         );
 
         return http.build();
     }
 
+    // ✅ Password encoder
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
+    // ✅ Authentication manager
     @Bean
     public AuthenticationManager authenticationManager(
             AuthenticationConfiguration config) throws Exception {
