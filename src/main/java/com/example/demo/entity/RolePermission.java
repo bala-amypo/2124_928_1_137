@@ -1,5 +1,6 @@
 package com.example.demo.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 
 @Entity
@@ -9,6 +10,7 @@ import jakarta.persistence.*;
         columnNames = {"role_id", "permission_id"}
     )
 )
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class RolePermission {
 
     @Id
@@ -23,10 +25,7 @@ public class RolePermission {
     @JoinColumn(name = "permission_id", nullable = false)
     private Permission permission;
 
-    public RolePermission() {
-    }
-
-    /* ========= GETTERS & SETTERS ========= */
+    public RolePermission() {}
 
     public Long getId() {
         return id;
@@ -36,12 +35,12 @@ public class RolePermission {
         return role;
     }
 
-    public void setRole(Role role) {
-        this.role = role;
-    }
-
     public Permission getPermission() {
         return permission;
+    }
+
+    public void setRole(Role role) {
+        this.role = role;
     }
 
     public void setPermission(Permission permission) {
