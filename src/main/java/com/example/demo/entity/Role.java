@@ -14,6 +14,7 @@ public class Role {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable = false)
     private String roleName;
 
     private String description;
@@ -29,6 +30,10 @@ public class Role {
     public Role() {
     }
 
+    /* ======================
+       JPA LIFECYCLE METHODS
+       ====================== */
+
     @PrePersist
     public void onCreate() {
         this.createdAt = Instant.now();
@@ -40,5 +45,43 @@ public class Role {
         this.updatedAt = Instant.now();
     }
 
-    // getters & setters
+    /* ======================
+       GETTERS & SETTERS
+       ====================== */
+
+    public Long getId() {
+        return id;
+    }
+
+    public String getRoleName() {
+        return roleName;
+    }
+
+    public void setRoleName(String roleName) {
+        this.roleName = roleName;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public Boolean getActive() {
+        return active;
+    }
+
+    public void setActive(Boolean active) {
+        this.active = active;
+    }
+
+    public Instant getCreatedAt() {
+        return createdAt;
+    }
+
+    public Instant getUpdatedAt() {
+        return updatedAt;
+    }
 }
