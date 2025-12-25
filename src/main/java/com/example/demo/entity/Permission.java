@@ -11,9 +11,13 @@ import jakarta.persistence.*;
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class Permission {
 
+    /* ================= PRIMARY KEY ================= */
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    /* ================= FIELDS ================= */
 
     @Column(name = "permission_key", nullable = false, unique = true)
     private String permissionKey;
@@ -22,33 +26,40 @@ public class Permission {
 
     private boolean active = true;
 
+    /* ================= CONSTRUCTOR ================= */
+
     public Permission() {
     }
 
-    /* ===== GETTERS & SETTERS ===== */
+    /* ================= GETTERS & SETTERS ================= */
 
     public Long getId() {
         return id;
+    }
+
+    // ✅ REQUIRED BY TESTS
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getPermissionKey() {
         return permissionKey;
     }
 
-    public String getDescription() {
-        return description;
-    }
-
-    public boolean isActive() {
-        return active;
-    }
-
     public void setPermissionKey(String permissionKey) {
         this.permissionKey = permissionKey;
     }
 
+    public String getDescription() {
+        return description;
+    }
+
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public boolean isActive() {
+        return active;
     }
 
     public void setActive(boolean active) {
