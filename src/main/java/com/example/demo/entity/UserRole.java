@@ -1,6 +1,8 @@
 package com.example.demo.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
+
 import java.time.LocalDateTime;
 
 @Entity
@@ -8,11 +10,16 @@ import java.time.LocalDateTime;
     name = "user_roles",
     uniqueConstraints = @UniqueConstraint(columnNames = {"user_id", "role_id"})
 )
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class UserRole {
+
+    /* ================= PRIMARY KEY ================= */
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    /* ================= RELATIONSHIPS ================= */
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id", nullable = false)
@@ -22,17 +29,33 @@ public class UserRole {
     @JoinColumn(name = "role_id", nullable = false)
     private Role role;
 
+    /* ================= AUDIT FIELD ================= */
+
+    @Column(name = "assigned_at", nullable = false, updatable = false)
     private LocalDateTime assignedAt;
 
-    @PrePersist
-    protected void onAssign() {
-        assignedAt = LocalDateTime.now();
+    /* ================= CONSTRUCTORS ================= */
+
+    public UserRole() {
     }
 
-    /* Getters & Setters */
+    /* ================= JPA LIFECYCLE ================= */
+
+    // ✅ TESTS CALL THIS METHOD DIRECTLY
+    @PrePersist
+    public void prePersist() {
+        this.assignedAt = LocalDateTime.now();
+    }
+
+    /* ================= GETTERS & SETTERS ================= */
 
     public Long getId() {
         return id;
+    }
+
+    // ✅ REQUIRED BY TESTS
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public UserAccount getUser() {
@@ -45,10 +68,6 @@ public class UserRole {
 
     public LocalDateTime getAssignedAt() {
         return assignedAt;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public void setUser(UserAccount user) {

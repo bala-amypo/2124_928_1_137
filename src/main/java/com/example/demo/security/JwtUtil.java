@@ -7,6 +7,7 @@ import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+import java.nio.charset.StandardCharsets;
 import java.security.Key;
 import java.util.Date;
 import java.util.HashMap;
@@ -15,14 +16,39 @@ import java.util.Map;
 @Component
 public class JwtUtil {
 
-    private final Key key;
+    /* ================= DEFAULTS FOR TESTS ================= */
 
-    @Value("${app.jwt.expiration-ms}")
-    private long expirationMs;
+    private static final String DEFAULT_SECRET =
+            "default-test-secret-key-should-be-at-least-32-bytes!";
+    private static final long DEFAULT_EXPIRATION_MS = 60 * 60 * 1000; // 1 hour
 
-    public JwtUtil(@Value("${app.jwt.secret}") String secret) {
-        this.key = Keys.hmacShaKeyFor(secret.getBytes());
+    /* ================= FIELDS ================= */
+
+    private Key key;
+    private long expirationMs = DEFAULT_EXPIRATION_MS;
+
+    /* ================= CONSTRUCTORS ================= */
+
+    // ✅ REQUIRED BY TESTS
+    public JwtUtil() {
+        this.key = Keys.hmacShaKeyFor(DEFAULT_SECRET.getBytes(StandardCharsets.UTF_8));
     }
+
+    // ✅ REQUIRED BY TESTS
+    public JwtUtil(String secret) {
+        this.key = Keys.hmacShaKeyFor(secret.getBytes(StandardCharsets.UTF_8));
+    }
+
+    // ✅ USED BY SPRING BOOT
+    public JwtUtil(
+            @Value("${app.jwt.secret}") String secret,
+            @Value("${app.jwt.expiration-ms}") long expirationMs
+    ) {
+        this.key = Keys.hmacShaKeyFor(secret.getBytes(StandardCharsets.UTF_8));
+        this.expirationMs = expirationMs;
+    }
+
+    /* ================= TOKEN METHODS ================= */
 
     public String generateToken(Map<String, Object> claims, String subject) {
 
@@ -34,9 +60,7 @@ public class JwtUtil {
                 .setClaims(claims)
                 .setSubject(subject)
                 .setIssuedAt(new Date())
-                .setExpiration(
-                        new Date(System.currentTimeMillis() + expirationMs)
-                )
+                .setExpiration(new Date(System.currentTimeMillis() + expirationMs))
                 .signWith(key, SignatureAlgorithm.HS256)
                 .compact();
     }
@@ -56,5 +80,12 @@ public class JwtUtil {
     public boolean isTokenValid(String token, String username) {
         return username.equals(getUsername(token))
                 && !getClaims(token).getExpiration().before(new Date());
+    }
+
+    /* ================= TEST-REQUIRED GETTER ================= */
+
+    // ✅ REQUIRED BY TESTS
+    public long getExpirationMillis() {
+        return expirationMs;
     }
 }

@@ -3,6 +3,8 @@ package com.example.demo.entity;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 
+import java.time.LocalDateTime;
+
 @Entity
 @Table(
     name = "role_permissions",
@@ -13,9 +15,13 @@ import jakarta.persistence.*;
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class RolePermission {
 
+    /* ================= PRIMARY KEY ================= */
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    /* ================= RELATIONSHIPS ================= */
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "role_id", nullable = false)
@@ -25,13 +31,33 @@ public class RolePermission {
     @JoinColumn(name = "permission_id", nullable = false)
     private Permission permission;
 
+    /* ================= AUDIT FIELD ================= */
+
+    @Column(name = "granted_at", nullable = false, updatable = false)
+    private LocalDateTime grantedAt;
+
+    /* ================= CONSTRUCTORS ================= */
+
     public RolePermission() {
     }
 
-    /* ===== GETTERS & SETTERS ===== */
+    /* ================= JPA LIFECYCLE ================= */
+
+    // ✅ REQUIRED BY TESTS
+    @PrePersist
+    public void prePersist() {
+        this.grantedAt = LocalDateTime.now();
+    }
+
+    /* ================= GETTERS & SETTERS ================= */
 
     public Long getId() {
         return id;
+    }
+
+    // ✅ REQUIRED BY TESTS
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public Role getRole() {
@@ -40,6 +66,10 @@ public class RolePermission {
 
     public Permission getPermission() {
         return permission;
+    }
+
+    public LocalDateTime getGrantedAt() {
+        return grantedAt;
     }
 
     public void setRole(Role role) {
