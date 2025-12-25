@@ -1,13 +1,11 @@
 package com.example.demo.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
-import java.time.Instant;
 
 @Entity
-@Table(
-    name = "user_accounts",
-    uniqueConstraints = @UniqueConstraint(columnNames = "email")
-)
+@Table(name = "users")
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class UserAccount {
 
     @Id
@@ -15,30 +13,11 @@ public class UserAccount {
     private Long id;
 
     private String email;
-
     private String fullName;
-
     private String password;
+    private boolean active = true;
 
-    private Boolean active = true;
-
-    private Instant createdAt;
-
-    private Instant updatedAt;
-
-    public UserAccount() {
-    }
-
-    @PrePersist
-    public void onCreate() {
-        createdAt = Instant.now();
-        updatedAt = Instant.now();
-    }
-
-    @PreUpdate
-    public void onUpdate() {
-        updatedAt = Instant.now();
-    }
+    public UserAccount() {}
 
     public Long getId() {
         return id;
@@ -48,31 +27,15 @@ public class UserAccount {
         return email;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
     public String getFullName() {
         return fullName;
-    }
-
-    public void setFullName(String fullName) {
-        this.fullName = fullName;
     }
 
     public String getPassword() {
         return password;
     }
 
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public Boolean getActive() {
+    public boolean isActive() {
         return active;
-    }
-
-    public void setActive(Boolean active) {
-        this.active = active;
     }
 }
