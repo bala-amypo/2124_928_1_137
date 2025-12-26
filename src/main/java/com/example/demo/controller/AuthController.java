@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/auth")
-@CrossOrigin   // IMPORTANT for Swagger + proxy (amypo.ai)
+@CrossOrigin  
 public class AuthController {
 
     private final AuthService authService;
@@ -21,10 +21,7 @@ public class AuthController {
         this.authService = authService;
     }
 
-    /**
-     * Register new user
-     * NO JWT REQUIRED
-     */
+    
     @PostMapping("/register")
     public AuthResponseDto register(@RequestBody RegisterRequestDto request) {
         return authService.register(request);
