@@ -25,7 +25,6 @@ public class UserRoleController {
 
     /* ================= GET BY ID ================= */
 
-    // ✅ FIXED: matches service + tests
     @GetMapping("/{id}")
     public UserRole getById(@PathVariable Long id) {
         return service.getMappingById(id);

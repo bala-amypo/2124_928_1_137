@@ -27,10 +27,7 @@ public class AuthController {
         return authService.register(request);
     }
 
-    /**
-     * Login existing user
-     * NO JWT REQUIRED
-     */
+    
     @PostMapping("/login")
     public AuthResponseDto login(@RequestBody AuthRequestDto request) {
         return authService.login(request);
