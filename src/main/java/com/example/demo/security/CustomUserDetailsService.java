@@ -28,13 +28,11 @@ public class CustomUserDetailsService implements UserDetailsService {
         UserAccount user = userAccountRepository.findByEmail(email)
                 .orElseThrow(() ->
                         new UsernameNotFoundException("User not found"));
-
-        // ✅ REQUIRED BY TESTS
+  
         if (!user.isActive()) {
             throw new UsernameNotFoundException("User is inactive");
-        }
+        } 
 
-        // ✅ NEVER allow null password
         String password = user.getPassword();
         if (password == null) {
             password = "";
