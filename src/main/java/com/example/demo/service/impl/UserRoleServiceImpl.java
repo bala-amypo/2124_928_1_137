@@ -28,9 +28,7 @@ public class UserRoleServiceImpl implements UserRoleService {
         this.userRoleRepository = userRoleRepository;
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
-    }
-
-    /* ================= ASSIGN ROLE ================= */
+    } 
 
     @Override
     public UserRole assignRole(UserRole userRole) {
@@ -63,26 +61,20 @@ public class UserRoleServiceImpl implements UserRoleService {
         mapping.setRole(role);
 
         return userRoleRepository.save(mapping);
-    }
-
-    /* ================= GET BY ID ================= */
+    } 
 
     @Override
     public UserRole getMappingById(Long id) {
         return userRoleRepository.findById(id)
                 .orElseThrow(() ->
                         new ResourceNotFoundException("Mapping not found"));
-    }
-
-    /* ================= GET BY USER ================= */
+    } 
 
     @Override
-    public List<UserRole> getRolesForUser(Long userId) {
-        // ✅ IMPORTANT: correct property path
+    public List<UserRole> getRolesForUser(Long userId) { 
         return userRoleRepository.findByUser_Id(userId);
     }
-
-    /* ================= REMOVE ================= */
+ 
 
     @Override
     public void removeRole(Long id) {

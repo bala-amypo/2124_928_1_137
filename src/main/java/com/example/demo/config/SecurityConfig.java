@@ -34,23 +34,18 @@ public class SecurityConfig {
             JwtUtil jwtUtil) throws Exception {
 
         http
-            // REQUIRED for Swagger + proxy
             .cors(cors -> {})
 
-            // Disable CSRF for REST APIs
             .csrf(csrf -> csrf.disable())
 
-            // JWT → Stateless
             .sessionManagement(session ->
                 session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
             )
 
             .authorizeHttpRequests(auth -> auth
 
-                // VERY IMPORTANT: allow OPTIONS (preflight)
                 .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll()
 
-                // AUTH endpoints
                 .requestMatchers(
                         HttpMethod.POST,
                         "/auth/register",

@@ -16,9 +16,7 @@ public class RoleServiceImpl implements RoleService {
 
     public RoleServiceImpl(RoleRepository repository) {
         this.repository = repository;
-    }
-
-    /* ================= CREATE ================= */
+    } 
 
     @Override
     public Role createRole(Role role) {
@@ -31,9 +29,7 @@ public class RoleServiceImpl implements RoleService {
 
         role.setRoleName(roleName);
         return repository.save(role);
-    }
-
-    /* ================= UPDATE ================= */
+    } 
 
     @Override
     public Role updateRole(Long id, Role role) {
@@ -43,8 +39,7 @@ public class RoleServiceImpl implements RoleService {
                         new ResourceNotFoundException("Role not found"));
 
         String newRoleName = role.getRoleName().toUpperCase();
-
-        // duplicate role name check (excluding current role)
+ 
         repository.findByRoleName(newRoleName)
                 .ifPresent(found -> {
                     if (!found.getId().equals(id)) {
@@ -57,8 +52,7 @@ public class RoleServiceImpl implements RoleService {
 
         return repository.save(existing);
     }
-
-    /* ================= GET ================= */
+ 
 
     @Override
     public Role getRoleById(Long id) {
@@ -72,8 +66,7 @@ public class RoleServiceImpl implements RoleService {
     public List<Role> getAllRoles() {
         return repository.findAll();
     }
-
-    /* ================= DEACTIVATE ================= */
+ 
 
     @Override
     public void deactivateRole(Long id) {

@@ -16,9 +16,7 @@ public class UserAccountServiceImpl implements UserAccountService {
 
     public UserAccountServiceImpl(UserAccountRepository repository) {
         this.repository = repository;
-    }
-
-    /* ================= CREATE ================= */
+    } 
 
     @Override
     public UserAccount createUser(UserAccount user) {
@@ -32,20 +30,16 @@ public class UserAccountServiceImpl implements UserAccountService {
         user.setEmail(email);
         return repository.save(user);
     }
-
-    /* ================= UPDATE ================= */
-
+ 
     @Override
     public UserAccount updateUser(Long id, UserAccount user) {
 
         UserAccount existing = repository.findById(id)
                 .orElseThrow(() ->
                         new ResourceNotFoundException("User not found"));
-
-        // normalize email
+ 
         String newEmail = user.getEmail().toLowerCase();
-
-        // check duplicate email (excluding current user)
+ 
         repository.findByEmail(newEmail)
                 .ifPresent(found -> {
                     if (!found.getId().equals(id)) {
@@ -58,8 +52,7 @@ public class UserAccountServiceImpl implements UserAccountService {
 
         return repository.save(existing);
     }
-
-    /* ================= GET ================= */
+ 
 
     @Override
     public UserAccount getUserById(Long id) {
@@ -72,8 +65,7 @@ public class UserAccountServiceImpl implements UserAccountService {
     public List<UserAccount> getAllUsers() {
         return repository.findAll();
     }
-
-    /* ================= DEACTIVATE ================= */
+ 
 
     @Override
     public void deactivateUser(Long id) {

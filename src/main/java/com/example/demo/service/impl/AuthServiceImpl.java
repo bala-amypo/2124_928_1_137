@@ -22,12 +22,10 @@ public class AuthServiceImpl implements AuthService {
     private final UserAccountRepository userAccountRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtUtil jwtUtil;
-
-    // used ONLY by tests
+ 
     @SuppressWarnings("unused")
     private AuthenticationManager authenticationManager;
-
-    /* ================= SPRING CONSTRUCTOR ================= */
+ 
     @Autowired
     public AuthServiceImpl(UserAccountRepository userAccountRepository,
                            PasswordEncoder passwordEncoder,
@@ -36,9 +34,7 @@ public class AuthServiceImpl implements AuthService {
         this.passwordEncoder = passwordEncoder;
         this.jwtUtil = jwtUtil;
     }
-
-    /* ================= TEST-ONLY CONSTRUCTOR ================= */
-    // ✅ used by unit tests (Spring will IGNORE this)
+ 
     public AuthServiceImpl(UserAccountRepository userAccountRepository,
                            PasswordEncoder passwordEncoder,
                            AuthenticationManager authenticationManager,
@@ -48,8 +44,7 @@ public class AuthServiceImpl implements AuthService {
         this.authenticationManager = authenticationManager;
         this.jwtUtil = jwtUtil;
     }
-
-    /* ================= REGISTER ================= */
+ 
 
     @Override
     public AuthResponseDto register(RegisterRequestDto request) {
@@ -69,8 +64,7 @@ public class AuthServiceImpl implements AuthService {
         String token = jwtUtil.generateToken(new HashMap<>(), user.getEmail());
         return new AuthResponseDto(token);
     }
-
-    /* ================= LOGIN ================= */
+ 
 
     @Override
     public AuthResponseDto login(AuthRequestDto request) {

@@ -26,9 +26,7 @@ public class RolePermissionServiceImpl implements RolePermissionService {
         this.rolePermissionRepository = rolePermissionRepository;
         this.roleRepository = roleRepository;
         this.permissionRepository = permissionRepository;
-    }
-
-    /* ================= CREATE ================= */
+    } 
 
     @Override
     public RolePermission create(RolePermission rolePermission) {
@@ -60,14 +58,10 @@ public class RolePermissionServiceImpl implements RolePermissionService {
         rp.setPermission(permission);
 
         RolePermission saved = rolePermissionRepository.save(rp);
-
-        // Re-fetch to avoid lazy/null issues
+ 
         return getMappingById(saved.getId());
     }
-
-    /* ================= GET BY ID ================= */
-
-    // ✅ REQUIRED BY TESTS
+ 
     @Override
     public RolePermission getMappingById(Long id) {
         return rolePermissionRepository.findById(id)
@@ -76,15 +70,12 @@ public class RolePermissionServiceImpl implements RolePermissionService {
                                 "RolePermission not found"));
     }
 
-    /* ================= GET BY ROLE ================= */
-
-    // ✅ REQUIRED BY TESTS
+  
     @Override
     public List<RolePermission> getPermissionsForRole(Long roleId) {
         return rolePermissionRepository.findByRole_Id(roleId);
     }
-
-    /* ================= DELETE ================= */
+ 
 
     @Override
     public void revokePermission(Long id) {
