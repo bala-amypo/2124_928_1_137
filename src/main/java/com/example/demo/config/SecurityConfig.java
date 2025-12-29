@@ -57,7 +57,6 @@ public class SecurityConfig {
                         "/auth/login"
                 ).permitAll()
 
-                // Swagger
                 .requestMatchers(
                         "/swagger-ui/**",
                         "/swagger-ui.html",
@@ -65,14 +64,11 @@ public class SecurityConfig {
                         "/simple-status"
                 ).permitAll()
 
-                // API secured
                 .requestMatchers("/api/**").authenticated()
 
-                // Everything else allowed (IMPORTANT)
                 .anyRequest().permitAll()
             )
 
-            // JWT filter
             .addFilterBefore(
                 new JwtAuthenticationFilter(jwtUtil),
                 UsernamePasswordAuthenticationFilter.class

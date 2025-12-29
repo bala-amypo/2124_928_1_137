@@ -23,7 +23,7 @@ public class Role {
     private LocalDateTime updatedAt;
 
     @OneToMany(mappedBy = "role", fetch = FetchType.LAZY)
-    @JsonIgnore   // FIX recursion
+    @JsonIgnore   
     private List<UserRole> userRoles;
 
     @PrePersist
@@ -37,7 +37,6 @@ public class Role {
         updatedAt = LocalDateTime.now();
     }
 
-    /* Getters & Setters */
 
     public Long getId() {
         return id;

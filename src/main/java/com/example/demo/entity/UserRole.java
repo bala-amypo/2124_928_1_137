@@ -37,13 +37,11 @@ public class UserRole {
         this.assignedAt = Instant.now();
     }
 
-    /* ================= GETTERS & SETTERS ================= */
 
     public Long getId() {
         return id;
     }
 
-    // ✅ REQUIRED BY TESTS
     public void setId(Long id) {
         this.id = id;
     }
@@ -56,7 +54,6 @@ public class UserRole {
         return role;
     }
 
-    // ✅ REQUIRED BY TESTS
     public Instant getAssignedAt() {
         return assignedAt;
     }

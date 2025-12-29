@@ -15,49 +15,35 @@ import java.time.Instant;
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class RolePermission {
 
-    /* ================= PRIMARY KEY ================= */
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
-    /* ================= RELATIONSHIPS ================= */
-
-    // 🔥 FIX: EAGER loading to avoid ByteBuddy proxy error
+    private Long id;r
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "role_id", nullable = false)
     private Role role;
 
-    // 🔥 FIX: EAGER loading to avoid ByteBuddy proxy error
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "permission_id", nullable = false)
     private Permission permission;
 
-    /* ================= AUDIT FIELD ================= */
 
     @Column(name = "granted_at", nullable = false, updatable = false)
     private Instant grantedAt;
 
-    /* ================= CONSTRUCTOR ================= */
 
     public RolePermission() {
     }
 
-    /* ================= JPA LIFECYCLE ================= */
-
-    // ✅ REQUIRED BY TESTS
     @PrePersist
     public void prePersist() {
         this.grantedAt = Instant.now();
     }
 
-    /* ================= GETTERS & SETTERS ================= */
 
     public Long getId() {
         return id;
     }
 
-    // ✅ REQUIRED BY TESTS
     public void setId(Long id) {
         this.id = id;
     }
@@ -70,7 +56,6 @@ public class RolePermission {
         return permission;
     }
 
-    // ✅ REQUIRED BY TESTS
     public Instant getGrantedAt() {
         return grantedAt;
     }

@@ -16,30 +16,21 @@ public class RolePermissionController {
         this.service = service;
     }
 
-    /* ================= CREATE ================= */
 
     @PostMapping
     public RolePermission create(@RequestBody RolePermission rolePermission) {
         return service.create(rolePermission);
     }
 
-    /* ================= GET BY ID ================= */
-
-    // ✅ FIXED: tests expect getMappingById
     @GetMapping("/{id}")
     public RolePermission getById(@PathVariable Long id) {
         return service.getMappingById(id);
     }
 
-    /* ================= GET BY ROLE ================= */
-
-    // ✅ FIXED: tests expect getPermissionsForRole
     @GetMapping("/role/{roleId}")
     public List<RolePermission> getByRoleId(@PathVariable Long roleId) {
         return service.getPermissionsForRole(roleId);
     }
-
-    /* ================= DELETE ================= */
 
     @DeleteMapping("/{id}")
     public void revoke(@PathVariable Long id) {
