@@ -10,13 +10,11 @@ import java.util.List;
 @Table(name = "user_accounts")
 public class UserAccount {
 
-    /* ================= PRIMARY KEY ================= */
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    /* ================= BASIC FIELDS ================= */
 
     @Column(unique = true, nullable = false)
     private String email;
@@ -30,7 +28,6 @@ public class UserAccount {
 
     private boolean active = true;
 
-    /* ================= TIMESTAMPS ================= */
 
     @Column(nullable = false, updatable = false)
     private Instant createdAt;
@@ -38,13 +35,11 @@ public class UserAccount {
     @Column(nullable = false)
     private Instant updatedAt;
 
-    /* ================= RELATIONSHIPS ================= */
 
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     @JsonIgnore
     private List<UserRole> userRoles;
 
-    /* ================= JPA LIFECYCLE ================= */
 
     @PrePersist
     public void prePersist() {
@@ -58,7 +53,6 @@ public class UserAccount {
         this.updatedAt = Instant.now();
     }
 
-    /* ================= GETTERS & SETTERS ================= */
 
     public Long getId() {
         return id;
@@ -100,7 +94,6 @@ public class UserAccount {
         this.active = active;
     }
 
-    /* ================= TIMESTAMP GETTERS ================= */
 
     public Instant getCreatedAt() {
         return createdAt;

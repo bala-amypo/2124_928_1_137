@@ -13,37 +13,25 @@ import java.time.Instant;
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 public class UserRole {
 
-    /* ================= PRIMARY KEY ================= */
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
-    /* ================= RELATIONSHIPS ================= */
-
-    // ✅ EAGER fixes ByteBuddy / Jackson serialization issues
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id", nullable = false)
     private UserAccount user;
-
-    // ✅ EAGER fixes ByteBuddy / Jackson serialization issues
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "role_id", nullable = false)
     private Role role;
 
-    /* ================= AUDIT FIELD ================= */
 
     @Column(name = "assigned_at", nullable = false, updatable = false)
     private Instant assignedAt;
 
-    /* ================= CONSTRUCTOR ================= */
 
     public UserRole() {
     }
 
-    /* ================= JPA LIFECYCLE ================= */
-
-    // ✅ REQUIRED BY TESTS
     @PrePersist
     public void prePersist() {
         this.assignedAt = Instant.now();
